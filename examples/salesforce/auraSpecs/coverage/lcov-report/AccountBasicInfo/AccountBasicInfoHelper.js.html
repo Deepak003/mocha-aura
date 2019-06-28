@@ -1,0 +1,2312 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for AccountBasicInfo/AccountBasicInfoHelper.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">AccountBasicInfo/</a> AccountBasicInfoHelper.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">17.97% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>71/395</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">3.74% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>4/107</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">25% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>10/40</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">17.97% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>71/395</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484
+485
+486
+487
+488
+489
+490
+491
+492
+493
+494
+495
+496
+497
+498
+499
+500
+501
+502
+503
+504
+505
+506
+507
+508
+509
+510
+511
+512
+513
+514
+515
+516
+517
+518
+519
+520
+521
+522
+523
+524
+525
+526
+527
+528
+529
+530
+531
+532
+533
+534
+535
+536
+537
+538
+539
+540
+541
+542
+543
+544
+545
+546
+547
+548
+549
+550
+551
+552
+553
+554
+555
+556
+557
+558
+559
+560
+561
+562
+563
+564
+565
+566
+567
+568
+569
+570
+571
+572
+573
+574
+575
+576
+577
+578
+579
+580
+581
+582
+583
+584
+585
+586
+587
+588
+589
+590
+591
+592
+593
+594
+595
+596
+597
+598
+599
+600
+601
+602
+603
+604
+605
+606
+607
+608
+609
+610
+611
+612
+613
+614
+615
+616
+617
+618
+619
+620
+621
+622
+623
+624
+625
+626
+627
+628
+629
+630
+631
+632
+633
+634
+635
+636
+637
+638
+639
+640
+641
+642
+643
+644
+645
+646
+647
+648
+649
+650
+651
+652
+653
+654
+655
+656
+657
+658
+659
+660
+661
+662
+663
+664
+665
+666
+667
+668
+669
+670
+671
+672
+673
+674
+675
+676
+677
+678
+679
+680
+681
+682
+683
+684
+685
+686
+687
+688
+689
+690
+691
+692
+693
+694
+695
+696
+697
+698
+699
+700
+701
+702
+703
+704
+705
+706
+707
+708
+709
+710
+711
+712
+713
+714
+715
+716
+717
+718
+719
+720
+721
+722
+723
+724
+725
+726
+727
+728
+729
+730
+731
+732
+733
+734
+735
+736
+737
+738
+739
+740
+741
+742
+743
+744
+745
+746
+747
+748
+749
+750</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">230×</span>
+<span class="cline-any cline-yes">230×</span>
+<span class="cline-any cline-yes">230×</span>
+<span class="cline-any cline-yes">230×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">168×</span>
+<span class="cline-any cline-yes">168×</span>
+<span class="cline-any cline-yes">168×</span>
+<span class="cline-any cline-yes">168×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">({
+    accordianToggle : function(component,event) {
+        var acc = component.find('socialAccordian');
+        //for(var eachObject in acc)
+        {
+            //$A.util.toggleClass(acc[eachObject], 'slds-show');
+            //$A.util.toggleClass(acc[eachObject], 'slds-hide');
+&nbsp;
+            $A.util.toggleClass(acc, 'slds-show');
+            $A.util.toggleClass(acc, 'slds-hide');
+        }
+    },
+    searchCustomerData : function(component,event,helper) {
+        var action, parameterObject;
+        var dropdownConfig={};
+        helper.showSpinner(component,event);
+        //Creating a tost object
+        var toastEvent = $A.get("e.force:showToast");
+        //Handeling both the object trigger
+        <span class="missing-if-branch" title="if path not taken" >I</span>if(component.get("v.isAccountObject")){
+<span class="cstat-no" title="statement not covered" >            action = component.get("c.searchCustomerDataByAccountId");</span>
+<span class="cstat-no" title="statement not covered" >            parameterObject = component.get("v.accountId");</span>
+        }else{
+            action = component.get("c.searchCustomerData");
+            parameterObject = component.get("v.caseId");
+        }
+        action.setParams({
+            ID : parameterObject
+        });
+        action.setCallback(this, <span class="fstat-no" title="function not covered" >function(response) {</span>
+<span class="cstat-no" title="statement not covered" >            var state = response.getState();</span>
+<span class="cstat-no" title="statement not covered" >            helper.hideSpinner(component,event);</span>
+<span class="cstat-no" title="statement not covered" >            if (state === "SUCCESS") {</span>
+<span class="cstat-no" title="statement not covered" >                var storeResponse = response.getReturnValue();</span>
+                //Storing to the model
+<span class="cstat-no" title="statement not covered" >                var formattedString = JSON.parse(storeResponse).response[0];</span>
+<span class="cstat-no" title="statement not covered" >                if(formattedString.dateCreated != null){</span>
+<span class="cstat-no" title="statement not covered" >                    formattedString.dateCreated = formattedString.dateCreated.split("T")[0];</span>
+                }
+                //Modifying the string for language and country
+<span class="cstat-no" title="statement not covered" >                if(formattedString.language !=null){</span>
+<span class="cstat-no" title="statement not covered" >                    dropdownConfig["language"]=formattedString.language.split("_")[0];</span>
+<span class="cstat-no" title="statement not covered" >                    dropdownConfig["language"]=formattedString.language.split("_")[0];</span>
+<span class="cstat-no" title="statement not covered" >                    dropdownConfig["currentLanguage"] = component.get("v.WWCE")["Languages"][dropdownConfig.language];</span>
+<span class="cstat-no" title="statement not covered" >                    dropdownConfig["currentCountry"] = component.get("v.WWCE")["Countries"][formattedString.country];</span>
+                    //Setting the temp language initially
+<span class="cstat-no" title="statement not covered" >                    component.set("v.tempLanguage", dropdownConfig.language);</span>
+                }
+                //Checking for user value none
+<span class="cstat-no" title="statement not covered" >                if(formattedString.userValue == "none"){</span>
+<span class="cstat-no" title="statement not covered" >                    formattedString.userValue == "NONE";</span>
+<span class="cstat-no" title="statement not covered" >                    formattedString.oldCustomerValue = formattedString.userValue;</span>
+                }else{
+<span class="cstat-no" title="statement not covered" >                    formattedString.oldCustomerValue = formattedString.userValue;</span>
+                }
+<span class="cstat-no" title="statement not covered" >                component.set("v.accountDetailsModel", formattedString);</span>
+<span class="cstat-no" title="statement not covered" >        				var newDob = component.get("v.accountDetailsModel.dob");</span>
+<span class="cstat-no" title="statement not covered" >        				component.set("v.newDob",newDob);</span>
+<span class="cstat-no" title="statement not covered" >                component.set("v.oldModel", JSON.stringify(formattedString));</span>
+<span class="cstat-no" title="statement not covered" >                component.set("v.oldCustomerValue", formattedString.oldCustomerValue);</span>
+                //Turning on the flags for the toggle
+<span class="cstat-no" title="statement not covered" >                component.set("v.optInGlobal", formattedString.globalOptin);</span>
+<span class="cstat-no" title="statement not covered" >                component.set("v.optInThirdParty", formattedString.thirdPartyOptin);</span>
+<span class="cstat-no" title="statement not covered" >                if(formattedString.globalOptin == 'true'){</span>
+<span class="cstat-no" title="statement not covered" >                    var optInGlobal = component.find('optInGlobalToggle');</span>
+<span class="cstat-no" title="statement not covered" >                    optInGlobal.set('v.checked', true);</span>
+                }
+<span class="cstat-no" title="statement not covered" >                if(formattedString.thirdPartyOptin == 'true'){</span>
+<span class="cstat-no" title="statement not covered" >                    var optInThirdParty = component.find('optInThirdPartyToggle');</span>
+<span class="cstat-no" title="statement not covered" >                    optInThirdParty.set('v.checked', true);</span>
+                }
+                //Formatting the persona string
+<span class="cstat-no" title="statement not covered" >                var listOfPerson = JSON.parse(storeResponse).response[0].personas;</span>
+<span class="cstat-no" title="statement not covered" >                component.set("v.personaData", listOfPerson);</span>
+<span class="cstat-no" title="statement not covered" >                component.set("v.selectConfig", dropdownConfig);</span>
+<span class="cstat-no" title="statement not covered" >                component.set("v.oldLanguage", dropdownConfig.language);</span>
+<span class="cstat-no" title="statement not covered" >                component.set('v.toResetPasswordEmail', formattedString.email);</span>
+            }
+        		else{
+<span class="cstat-no" title="statement not covered" >                        var errorMessage = response.getError();</span>
+                        //Adding failure toast
+<span class="cstat-no" title="statement not covered" >                        toastEvent.setParams({</span>
+                            message: errorMessage[0].message,
+                            type: "error"
+                        });
+<span class="cstat-no" title="statement not covered" >                        toastEvent.fire();</span>
+             }
+        });
+        $A.enqueueAction(action);
+    },
+&nbsp;
+    saveCustomer: <span class="fstat-no" title="function not covered" >function(component, event,helper) {</span>
+<span class="cstat-no" title="statement not covered" >        if(component.get("v.oldCustomerValue") != component.get("v.accountDetailsModel").userValue){</span>
+<span class="cstat-no" title="statement not covered" >            helper.updateCustomerFlag(component,event,helper);</span>
+        }else{
+<span class="cstat-no" title="statement not covered" >            helper.saveAccountData(component,event,helper);</span>
+        }
+    },
+&nbsp;
+    saveAccountData : function(component,event,helper, callback) {
+        var action = component.get("c.saveCustomer");
+        var changeModel = component.get("v.accountDetailsModel");
+        //Select the new country/language in the model
+        //component.get("v.selectConfig").currentCountry = component.get("v.WWCE")["Countries"][component.get("v.accountDetailsModel").country];
+        //component.get("v.selectConfig").currentLanguage = component.get("v.WWCE")["Languages"][component.get("v.tempLanguage")];
+        changeModel.language = component.get("v.tempLanguage")+'_'+component.get("v.accountDetailsModel").country;
+&nbsp;
+        //Creating a tost object
+        var toastEvent = $A.get("e.force:showToast");
+        <span class="missing-if-branch" title="else path not taken" >E</span>if(component.get("v.Spinner") != true &amp;&amp; component.get("v.parentEmailFlag") != true){ //TSM-3843 for the 2nd Condition
+            helper.showSpinner(component,event);
+        }
+&nbsp;
+        //Parsing the data to map - As part of Spring 19 release salesforce issue
+        changeModel = JSON.stringify(changeModel);
+&nbsp;
+        action.setParams({
+            data : changeModel,
+            caseId : component.get("v.caseId"),
+            accountId : component.get("v.accountId")
+        });
+        action.setCallback(this, <span class="fstat-no" title="function not covered" >function(response) {</span>
+<span class="cstat-no" title="statement not covered" >            var state = response.getState();</span>
+            //Hiding the spinner
+<span class="cstat-no" title="statement not covered" >            helper.hideSpinner(component,event);</span>
+<span class="cstat-no" title="statement not covered" >            if (state === "SUCCESS") {</span>
+                //Calling update customer flag function
+<span class="cstat-no" title="statement not covered" >                component.set("v.updateFlag", "true");</span>
+<span class="cstat-no" title="statement not covered" >				component.set("v.openUnderAgeModal",false);</span>
+<span class="cstat-no" title="statement not covered" >                    component.set("v.openSpinner",false);</span>
+                //Adding success toast
+<span class="cstat-no" title="statement not covered" >                toastEvent.setParams({</span>
+                    message: "Account Info Edit Complete",
+                    type: "success"
+                });
+<span class="cstat-no" title="statement not covered" >                toastEvent.fire();</span>
+<span class="cstat-no" title="statement not covered" >				component.getEvent("onSaveAccount").fire();</span>
+            }else{
+<span class="cstat-no" title="statement not covered" >                var errorMessage = response.getError();</span>
+                //Adding failure toast
+<span class="cstat-no" title="statement not covered" >                toastEvent.setParams({</span>
+                    message: errorMessage[0].message,
+                    type: "error"
+                });
+<span class="cstat-no" title="statement not covered" >                toastEvent.fire();</span>
+            }
+            //Loading the Account Info again to refresh the UI
+            //this.searchCustomerData(component,event,helper);
+        });
+        $A.enqueueAction(action);
+    },
+    // TSM 1912
+    resetPasswordEmail :<span class="fstat-no" title="function not covered" >function(component,event,helper){</span>
+<span class="cstat-no" title="statement not covered" >        var caseObject = component.get('v.caseObj');</span>
+<span class="cstat-no" title="statement not covered" >        var action = component.get("c.resetPasswordForCustomer");</span>
+<span class="cstat-no" title="statement not covered" >        var mapResetPassword = {};</span>
+<span class="cstat-no" title="statement not covered" >        var accountDetails = component.get("v.accountDetailsModel");</span>
+<span class="cstat-no" title="statement not covered" >        var channel;</span>
+<span class="cstat-no" title="statement not covered" >        mapResetPassword["customerId"] = accountDetails.id;</span>
+<span class="cstat-no" title="statement not covered" >        if(caseObject != null){</span>
+<span class="cstat-no" title="statement not covered" >            mapResetPassword["caseId"] = caseObject.Id;</span>
+<span class="cstat-no" title="statement not covered" >            if(caseObject.Current_Channel__c == undefined){</span>
+<span class="cstat-no" title="statement not covered" >                mapResetPassword["channel"] = caseObject.Channel__c;</span>
+<span class="cstat-no" title="statement not covered" >                channel = caseObject.Channel__c;</span>
+            }else{
+<span class="cstat-no" title="statement not covered" >            	mapResetPassword["channel"] = caseObject.Current_Channel__c;</span>
+<span class="cstat-no" title="statement not covered" >            	channel = caseObject.Current_Channel__c;</span>
+            }
+        }else{
+<span class="cstat-no" title="statement not covered" >            mapResetPassword["channel"] = 'account';</span>
+<span class="cstat-no" title="statement not covered" >            channel = 'account';</span>
+        }
+<span class="cstat-no" title="statement not covered" >        mapResetPassword["email"] = accountDetails.email;</span>
+<span class="cstat-no" title="statement not covered" >        mapResetPassword["fromAddress"] = $A.get("$Label.c.ORG_WIDE_EMAIL_ADDRESS");</span>
+<span class="cstat-no" title="statement not covered" >        mapResetPassword["action"] = 'resetPasswordLinkAndToken';</span>
+<span class="cstat-no" title="statement not covered" >        mapResetPassword["emailLocale"]=accountDetails.locale;</span>
+<span class="cstat-no" title="statement not covered" >        mapResetPassword["language"] = accountDetails.language;</span>
+<span class="cstat-no" title="statement not covered" >         action.setParams({</span>
+           mapResetPasswordDetails : mapResetPassword
+        });
+        //component.set('v.isResetPasswordOpen', false);
+        //helper.showSpinner(component,event);
+<span class="cstat-no" title="statement not covered" >        component.set('v.isLoading', true);</span>
+<span class="cstat-no" title="statement not covered" >        action.setCallback(this, <span class="fstat-no" title="function not covered" >function(response){</span></span>
+<span class="cstat-no" title="statement not covered" >            component.set('v.isLoading', false);</span>
+            //helper.hideSpinner(component,event);
+<span class="cstat-no" title="statement not covered" >            var state = response.getState();</span>
+            //var successDetails = JSON.parse(response.getReturnValue());
+<span class="cstat-no" title="statement not covered" >            if (state === "SUCCESS"){</span>
+                //Util.handleSuccess(component, 'A Reset Password email has been sent1');
+<span class="cstat-no" title="statement not covered" >                var responseObject = response.getReturnValue();</span>
+<span class="cstat-no" title="statement not covered" >				var parseResponse = JSON.parse(response.getReturnValue());</span>
+<span class="cstat-no" title="statement not covered" >                var isSendEmail = parseResponse.response[0].isSendEmail;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				var toastEvent = $A.get("e.force:showToast");</span>
+<span class="cstat-no" title="statement not covered" >                if( (channel != 'Email' || channel == 'account') &amp;&amp; isSendEmail == true){</span>
+<span class="cstat-no" title="statement not covered" >                    toastEvent.setParams({</span>
+                        title : 'A Reset Password email has been sent.',
+                        message: ' ',
+                        type: 'success'
+                    });
+<span class="cstat-no" title="statement not covered" >                    toastEvent.fire();</span>
+                }else{
+<span class="cstat-no" title="statement not covered" >                    var toastEvent = $A.get("e.force:showToast")</span>
+<span class="cstat-no" title="statement not covered" >                    toastEvent.setParams({</span>
+                        title : 'A Reset Password message will be sent',
+                        message: 'The reset password link has been added to the outbound message and will be sent upon case save.',
+                        duration:' 5000',
+                        type: 'success',
+                    });
+<span class="cstat-no" title="statement not covered" >                    toastEvent.fire();</span>
+					// Needed for Email type of email to send outbound details via component event.
+<span class="cstat-no" title="statement not covered" >					var outboundEmailDetails = component.getEvent("sendOutboundEmailIdEvt");</span>
+<span class="cstat-no" title="statement not covered" >                    outboundEmailDetails.setParams({</span>
+                        "outbountEmailVO" : parseResponse.response[0]
+                    });
+<span class="cstat-no" title="statement not covered" >                    outboundEmailDetails.fire();</span>
+                }
+<span class="cstat-no" title="statement not covered" >               component.set('v.isResetPasswordOpen', false);</span>
+            }else <span class="cstat-no" title="statement not covered" >if(state == 'ERROR'){</span>
+<span class="cstat-no" title="statement not covered" >                var toastEvent = $A.get("e.force:showToast")</span>
+<span class="cstat-no" title="statement not covered" >                toastEvent.setParams({</span>
+                    title : 'Something went wrong.Please contact IT Team for the same.',
+                    message: ' ',
+                    duration:' 5000',
+                    type: 'error',
+                  });
+<span class="cstat-no" title="statement not covered" >                toastEvent.fire();</span>
+<span class="cstat-no" title="statement not covered" >                component.set('v.isResetPasswordOpen', false);</span>
+            }
+        });
+<span class="cstat-no" title="statement not covered" >        $A.enqueueAction(action);</span>
+    },
+    updateCustomerFlag : function(component,event,helper) {
+        var action = component.get("c.updateCustomerFlagData");
+        var updateFlagData = {};
+        var changeModel = component.get("v.accountDetailsModel");
+        updateFlagData["customerId"]  = changeModel.id;
+        updateFlagData["userId"]  = changeModel.id;
+        updateFlagData["oldCustomerValue"]  = component.get("v.oldCustomerValue");
+        updateFlagData["customerValue"]  = component.get("v.accountDetailsModel").userValue;
+        updateFlagData["action"] = "updateAccountFlag";
+        var accountEdit = component.get('v.accountInfoChange');
+        var toastEvent = $A.get("e.force:showToast");
+        //Starting spinner
+        helper.showSpinner(component,event);
+        action.setParams({
+            flagUpdateData : updateFlagData,
+            caseId : component.get("v.caseId"),
+            accountId : component.get("v.accountId")
+        });
+        action.setCallback(this, <span class="fstat-no" title="function not covered" >function(response) {</span>
+<span class="cstat-no" title="statement not covered" >            var state = response.getState();</span>
+<span class="cstat-no" title="statement not covered" >            if (state === "SUCCESS") {</span>
+<span class="cstat-no" title="statement not covered" >                if(accountEdit){</span>
+<span class="cstat-no" title="statement not covered" >                    helper.saveAccountData(component,event,helper);</span>
+                }else{
+                    //Calling update customer flag function
+<span class="cstat-no" title="statement not covered" >                    component.set("v.updateFlag", "true");</span>
+                    //Hiding the spinner
+<span class="cstat-no" title="statement not covered" >                    helper.hideSpinner(component,event);</span>
+                    //Adding success toast
+<span class="cstat-no" title="statement not covered" >                    toastEvent.setParams({</span>
+                        message: "Account Info Edit Complete",
+                        type: "success"
+                    });
+<span class="cstat-no" title="statement not covered" >                    toastEvent.fire();</span>
+                }
+            }else{
+                //Hiding the spinner
+<span class="cstat-no" title="statement not covered" >                helper.hideSpinner(component,event);</span>
+                //Adding success toast
+<span class="cstat-no" title="statement not covered" >                toastEvent.setParams({</span>
+                    message: "Account Info Edit Failed",
+                    type: "error"
+                });
+<span class="cstat-no" title="statement not covered" >                toastEvent.fire();</span>
+            }
+        });
+        $A.enqueueAction(action);
+    },
+&nbsp;
+    showSpinner: function(component, event) {
+        component.set("v.Spinner", true);
+    },
+&nbsp;
+    hideSpinner : function(component,event){
+        component.set("v.Spinner", false);
+    },
+&nbsp;
+    showSocialSpinner: function(component, event) {
+        component.set("v.socialSpinner", true);
+    },
+&nbsp;
+    hideSocialSpinner : function(component,event){
+        component.set("v.socialSpinner", false);
+    },
+&nbsp;
+    populateWWCEObjects : function(component,event, helper){
+        var WWCE={
+            "States": {
+                'AL':'Alabama','AK':'Alaska','AZ':'Arizona','AR':'Arkansas','CA':'California', 'CO':'Colorado','CT':'Connecticut','DE':'Delaware','FL':'Florida','GA':'Georgia','HI':'Hawaii','ID':'Idaho','IL':'Illinois','IN':'Indiana','IA':'Iowa','KS':'Kansas','KY':'Kentucky','LA':'Louisiana','ME':'Maine','MD':'Maryland','MA':'Massachusetts','MI':'Michigan','MN':'Minnesota','MS':'Mississippi','MO':'Missouri','MT':'Montana','NE':'Nebraska', 'NV':'Nevada','NH':'New Hampshire','NJ':'New Jersey','NM':'New Mexico','NY':'New York','NC':'North Carolina','ND':'North Dakota','OH':'Ohio','OK':'Oklahoma','OR':'Oregon','PA':'Pennsylvania', 'RI':'Rhode Island','SC':'South Carolina','SD':'South Dakota','TN':'Tennessee','TX':'Texas','UT':'Utah','VT':'Vermont', 'VA':'Virginia','WA':'Washington', 'WV':'West Virginia','WI':'Wisconsin','WY':'Wyoming'
+            },
+            "Countries": {
+                'US':'United States','AF':'Afghanistan','AL':'Albania','AX':'Aland Island','DZ':'Algeria','AS':'American Samoa','AD':'Andorra','AO':'Angola','AI':'Anguilla','AQ':'Antarctica', 'AG':'Antigua and Barbuda','AR':'Argentina','AM':'Armenia', 'AW':'Aruba','AU':'Australia', 'AT':'Austria','AZ':'Azerbaijan','BS':'Bahamas','BH':'Bahrain','BD':'Bangladesh','BB':'Barbados','BY':'Belarus','BE':'Belgium','BZ':'Belize','BJ':'Benin','BM':'Bermuda','BT':'Bhutan','BO':'Bolivia','BA':'Bosnia and Herzegovina','BW':'Botswana','BV':'Bouvet Island','BR':'Brazil','IO':'British Indian Ocean Territory (Chagos Archipelago)','VG':'British Virgin Islands','BN':'Brunei','BG':'Bulgaria','BF':'Burkina Faso','BI':'Burundi','KH':'Cambodia','CM':'Cameroon','CA':'Canada','CV':'Cape Verde','KY':'Cayman Islands','CF':'Central African Republic','TD':'Chad','CL':'Chile','CN':'China', 'CX':'Christmas Island','CC':'Cocos Islands', 'CO':'Colombia','KM':'Comoros','CG':'Congo,People\'s Republic of','CK':'Cook Islands','CR':'Costa Rica','HR':'Croatia','CY':'Cyprus', 'CZ':'Czech Republic','DK':'Denmark', 'DJ':'Djibouti','DM':'Dominica','DO':'Dominican Republic','TL':'East Timor','EC':'Ecuador','EG':'Egypt','SV':'El Salvador','GQ':'Equatorial Guinea','ER':'Eritrea', 'EE':'Estonia','ET':'Ethiopia','FO':'Faeroe Islands','FK':'Falkland Islands (Malvinas)','FJ':'Fiji','FI':'Finland','FR':'France','GF':'French Guiana','PF':'French Polynesia', 'TF':'French Southern Territories','GA':'Gabon','GM':'Gambia','GE':'Georgia','DE':'Germany','GH':'Ghana','GI':'Gibraltar','GR':'Greece','GL':'Greenland', 'GD':'Grenada','GP':'Guadaloupe', 'GU':'Guam','GT':'Guatemala','GN':'Guinea','GW':'Guinea-Bissau','GY':'Guyana,Republic of','HT':'Haiti','HM':'Heard and McDonald Islands', 'HN':'Honduras','HK':'Hong Kong', 'HU':'Hungary','IS':'Iceland','IN':'India','ID':'Indonesia','IQ':'Iraq','IE':'Ireland','IL':'Israel','IT':'Italy','CI':'Ivory Coast','JM':'Jamaica','JP':'Japan','JO':'Jordan','KZ':'Kazakhstan','KE':'Kenya', 'KI':'Kiribati','KW':'Kuwait', 'KG':'Kyrgyz Republic','LA':'Lao People\'s Democratic Republic','LV':'Latvia', 'LB':'Lebanon','LS':'Lesotho','LR':'Liberia','LI':'Liechtenstein','LT':'Lithuania','LU':'Luxembourg','MK':'Macedonia','MG':'Madagascar','MW':'Malawi', 'MY':'Malaysia','MV':'Maldives', 'ML':'Mali','MT':'Malta','MH':'Marshall Islands','MQ':'Martinique','MR':'Mauritania','MU':'Mauritius','YT':'Mayotte','MX':'Mexico','FM':'Micronesia', 'MD':'Moldova','MC':'Monaco', 'MN':'Mongolia','ME':'Montenegro', 'MS':'Montserrat','MA':'Morocco','MZ':'Mozambique','NA':'Namibia','NR':'Nauru', 'NP':'Nepal','NL':'Netherlands', 'AN':'Netherlands Antilles','NC':'New Caledonia','NZ':'New Zealand','NI':'Nicaragua','NE':'Niger','NG':'Nigeria','NU':'Niue','NF':'Norfolk Island','MP':'Northern Mariana Islands', 'NO':'Norway','OM':'Oman','PK':'Pakistan','PW':'Palau','PA':'Panama','PG':'Papua New Guinea','PY':'Paraguay','PE':'Peru','PH':'Philippines','PN':'Pitcairn Island','PL':'Poland', 'PT':'Portugal','PR':'Puerto Rico', 'QA':'Qatar','RE':'Reunion','RO':'Romania','RU':'Russian Federation','RW':'Rwanda', 'WS':'Samoa','SM':'San Marino', 'ST':'Sao Tome and Principe','SA':'Saudi Arabia','SN':'Senegal','RS':'Serbia','SC':'Seychelles','SL':'Sierra Leone','SG':'Singapore', 'SK':'Slovakia (Slovak Republic)','SI':'Slovenia','SB':'Solomon Islands','SO':'Somalia','ZA':'South Africa', 'KR':'South Korea','ES':'Spain', 'LK':'Sri Lanka','SH':'St. Helena','KN':'St. Kitts and Nevis','LC':'St. Lucia','PM':'St. Pierre and Miquelon','VC':'St. Vincent and the Grenadines','SR':'Suriname', 'SJ':'Svalbard &amp;amp; Jan Mayen Islands','SZ':'Swaziland','SE':'Sweden','CH':'Switzerland','TW':'Taiwan','TJ':'Tajikistan','TZ':'Tanzania', 'TH':'Thailand','TG':'Togo', 'TK':'Tokelau','TO':'Tonga','TT':'Trinidad and Tobago','TN':'Tunisia','TR':'Turkey','TM':'Turkmenistan','TC':'Turks and Caicos Islands', 'TV':'Tuvalu','VI':'US Virgin Islands', 'UG':'Uganda','UA':'Ukraine','AE':'United Arab Emirates','GB':'United Kingdom','UM':'United States Minor Outlying Islands','UY':'Uruguay','UZ':'Uzbekistan', 'VU':'Vanuatu','VA':'Vatican City', 'VE':'Venezuela','VN':'Viet Nam','WF':'Wallis and Futuna Islands','EH':'Western Sahara','YE':'Yemen','ZM':'Zambia','ZW':'Zimbabwe'
+            },
+            "CountryCodes": { 'AF': '+93', 'AX': '+358', 'AL': '+355', 'DZ': '+213', 'AS': '+1', 'AD': '+376', 'AO': '+244', 'AI': '+1', 'AQ': '+672', 'AG': '+268', 'AR': '+54', 'AM': '+374', 'AW': '+297', 'AU': '+61', 'AT': '+43', 'AZ': '+994', 'BS': '+1', 'BH': '+973', 'BD': '+880', 'BB': '+1', 'BY': '+375', 'BE': '+32', 'BZ': '+501', 'BJ': '+229', 'BM': '+1', 'BT': '+975', 'BO': '+591', 'BA': '+387', 'BW': '+267', 'BV': '+47', 'BR': '+55', 'IO': '+246', 'VG': '+1', 'BN': '+673', 'BG': '+359', 'BF': '+226', 'BI': '+257', 'KH': '+855', 'CM': '+237', 'CA': '+1', 'CV': '+238', 'KY': '+1', 'CF': '+236', 'TD': '+235', 'CL': '+56', 'CN': '+86', 'CX': '+61', 'CC': '+891', 'CO': '+57', 'KM': '+269', 'CG': '+242', 'CK': '+682', 'CR': '+506', 'HR': '+385', 'CY': '+357', 'CZ': '+420', 'DK': '+45', 'DJ': '+253', 'DM': '+1', 'DO': '+1', 'TL': '+670', 'EC': '+593', 'EG': '+20', 'SV': '+503', 'GQ': '+240', 'ER': '+291', 'EE': '+372', 'ET': '+251', 'FO': '+298', 'FK': '+500', 'FJ': '+679', 'FI': '+358', 'FR': '+33', 'GF': '+594', 'PF': '+689', 'GA': '+241', 'GM': '+220', 'GE': '+995', 'DE': '+49', 'GH': '+233', 'GI': '+350', 'GR': '+30', 'GL': '+299', 'GD': '+1', 'GP': '+590', 'GU': '+1', 'GT': '+502', 'GN': '+224', 'GW': '+245', 'GY': '+592', 'HT': '+509', 'HN': '+504', 'HK': '+852', 'HU': '+36', 'IS': '+354', 'IN': '+91', 'ID': '+62', 'IQ': '+964', 'IE': '+353', 'IL': '+972', 'IT': '+39', 'CI': '+225', 'JM': '+1', 'JP': '+81', 'JO': '+962', 'KZ': '+7', 'KE': '+254', 'KI': '+686', 'KW': '+965', 'KG': '+996', 'LA': '+856', 'LV': '+371', 'LB': '+961', 'LS': '+266', 'LR': '+231', 'LI': '+423', 'LT': '+370', 'LU': '+352', 'MK': '+389', 'MG': '+261', 'MW': '+265', 'MY': '+60', 'MV': '+960', 'ML': '+223', 'MT': '+356', 'MH': '+692', 'MQ': '+596', 'MR': '+222', 'MU': '+230', 'YT': '+269', 'MX': '+52', 'FM': '+691', 'MD': '+373', 'MC': '+377', 'MN': '+976', 'ME': '+382', 'MS': '+1', 'MA': '+212', 'MZ': '+258', 'NA': '+264', 'NR': '+674', 'NP': '+977', 'NL': '+31', 'AN': '+599', 'NC': '+687', 'NZ': '+64', 'NI': '+505', 'NE': '+227', 'NG': '+234', 'NU': '+683', 'NF': '+672', 'MP': '+1', 'NO': '+47', 'OM': '+968', 'PK': '+92', 'PW': '+680', 'PA': '+507', 'PG': '+675', 'PY': '+595', 'PE': '+51', 'PH': '+63', 'PN': '+64', 'PL': '+48', 'PT': '+351', 'PR': '+1', 'QA': '+974', 'RE': '+262', 'RO': '+40', 'RU': '+7', 'RW': '+250', 'WS': '+685', 'SM': '+378', 'ST': '+239', 'SA': '+966', 'SN': '+221', 'RS': '+381', 'SC': '+248', 'SL': '+232', 'SG': '+65', 'SK': '+421', 'SI': '+386', 'SB': '+677', 'SO': '+252', 'ZA': '+27', 'KR': '+82', 'ES': '+34', 'LK': '+94', 'SH': '+290', 'KN': '+869', 'LC': '+1', 'PM': '+508', 'VC': '+1784', 'SR': '+597', 'SZ': '+268', 'SE': '+46', 'CH': '+41', 'TW': '+886', 'TJ': '+992', 'TZ': '+255', 'TH': '+66', 'TG': '+228', 'TK': '+690', 'TO': '+676', 'TT': '+1', 'TN': '+216', 'TR': '+90', 'TM': '+993', 'TC': '+1', 'TV': '+688', 'UG': '+256', 'UA': '+380', 'AE': '+971', 'GB': '+44', 'US': '+1', 'UY': '+598', 'VI': '+1', 'UZ': '+998', 'VU': '+678', 'VA': '+39', 'VE': '+58', 'VN': '+84', 'WF': '+681', 'EH': '+212', 'YE': '+967', 'ZM': '+260', 'ZW': '+263'
+                            },
+            "CountryCodeMinMax": {
+                'US': {'Min':'10' ,'Max':'10' },'AF': {'Min':'9' ,'Max':'9' },'AL': {'Min':'3' ,'Max':'9' },'DZ': {'Min':'8' ,'Max':'9' },'AS': {'Min':'10' ,'Max':'10' },'AD': {'Min':'6' ,'Max':'9' },'AO': {'Min':'9' ,'Max':'9' },'AI': {'Min':'10' ,'Max':'10' },'AG': {'Min':'10' ,'Max':'10' },'AR': {'Min':'10' ,'Max':'10' },'AM': {'Min':'8' ,'Max':'8' },'AW': {'Min':'7' ,'Max':'7' },'AU': {'Min':'4' ,'Max':'15' },'AT': {'Min':'4' ,'Max':'13' },'AZ': {'Min':'8' ,'Max':'9' },'BS': {'Min':'10' ,'Max':'10' },'BH': {'Min':'8' ,'Max':'8' },'BD': {'Min':'6' ,'Max':'10' },'BB': {'Min':'10' ,'Max':'10' },'BY': {'Min':'9' ,'Max':'10' },'BE': {'Min':'8' ,'Max':'9' },'BZ': {'Min':'7' ,'Max':'7' },'BJ': {'Min':'8','Max':'8' },'BM': {'Min':'10' ,'Max':'10' },'BT': {'Min':'7' ,'Max':'8' },'BO': {'Min':'8' ,'Max':'8' },'BA': {'Min':'8' ,'Max':'8' },'BW': {'Min':'7' ,'Max':'8' },'BR': {'Min':'10' ,'Max':'10' },'VG': {'Min':'10' ,'Max':'10' },'BN': {'Min':'7' ,'Max':'7' },'BG': {'Min':'7' ,'Max':'9' },'BF': {'Min':'8' ,'Max':'8' },'BI': {'Min':'8' ,'Max':'8' },'KH': {'Min':'8' ,'Max':'8' },'CM': {'Min':'8' ,'Max':'8' },'CA': {'Min':'10' ,'Max':'10' },'CV': {'Min':'7' ,'Max':'7' },'KY': {'Min':'10' ,'Max':'10' },'CF': {'Min':'8' ,'Max':'8' },'TD': {'Min':'6' ,'Max':'7' },'CL': {'Min':'8' ,'Max':'9' },'CN': {'Min':'5' ,'Max':'12' },'CO': {'Min':'8' ,'Max':'10' },'KM': {'Min':'7' ,'Max':'7' },'CG': {'Min':'6' ,'Max':'7' },'CK': {'Min':'5' ,'Max':'5' },'CR': {'Min':'8' ,'Max':'8' },'HR': {'Min':'8' ,'Max':'12' },'CY': {'Min':'8' ,'Max':'11' },'CZ': {Min:'4' ,'Max':'12' },'DK': {'Min':'8' ,'Max':'8' },'DJ': {'Min':'6' ,'Max':'6' },'DM': {'Min':'10' ,'Max':'10' },'DO': {'Min':'10' ,'Max':'10' },'EC': {'Min':'8' ,'Max':'8' },'EG': {'Min':'7' ,'Max':'9' },'SV': {'Min':'7' ,'Max':'11' },'GQ': {'Min':'6' ,'Max':'6' },'ER': {'Min':'7' ,'Max':'7' },'EE': {'Min':'7' ,'Max':'10' },'ET': {'Min':'9' ,'Max':'9' },'FO': {'Min':'6' ,'Max':'6' },'FK': {'Min':'5','Max':'5' },'FJ': {'Min':'7' ,'Max':'7' },'FI': {'Min':'5' ,'Max':'12' },'FR': {'Min':'9' ,'Max':'9' },'GF': {'Min':'9' ,'Max':'9' },'PF': {'Min':'6' ,'Max':'6' },'GA': {'Min':'6' ,'Max':'7' },'GM': {'Min':'7' ,'Max':'7' },'GE': {'Min':'8' ,'Max':'8' },'DE': {'Min':'6' ,'Max':'13' },'GH': {'Min':'5' ,'Max':'9' },'GI': {'Min':'8' ,'Max':'8' },'GR': {'Min':'10' ,'Max':'10' },'GL': {'Min':'6' ,'Max':'6' },'GD': {'Min':'10' ,'Max':'10' },'GP': {'Min':'9' ,'Max':'9' },'GU': {'Min':'10' ,'Max':'10' },'GT': {'Min':'8' ,'Max':'8' },'GN': {'Min':'8' ,'Max':'8' },'GW': {'Min':'7' ,'Max':'7' },'GY': {'Min':'7' ,'Max':'7' },'HT': {'Min':'8' ,'Max':'8' },'HN': {'Min':'7' ,'Max':'8' },'HK': {'Min':'4' ,'Max':'9' },'HU': {'Min':'8' ,'Max':'9' },'IS': {'Min':'7' ,'Max':'9' },'IN': {'Min':'7' ,'Max':'10' },'ID': {'Min':'5' ,'Max':'10' },'IQ': {'Min':'8' ,'Max':'10' },'IE': {'Min':'7' ,'Max':'11' },'IL': {'Min':'8' ,'Max':'9' },'IT': {'Min':'1','Max':'11'},'JM': {'Min':'10' ,'Max':'10' },'JP': {'Min':'9' ,'Max':'10' },'JO': {'Min':'5' ,'Max':'9' },'KZ': {'Min':'10' ,'Max':'10' },'KE': {'Min':'6' ,'Max':'10' },'KI': {'Min':'5' ,'Max':'5' },'KW': {'Min':'7' ,'Max':'8' },'KG': {'Min':'9' ,'Max':'9' },'LA': {'Min':'8' ,'Max':'9' },'LV': {'Min':'7' ,'Max':'8' },'LB': {'Min':'7' ,'Max':'8' },'LS': {'Min':'8' ,'Max':'8' },'LR': {'Min':'7' ,'Max':'8' },'LI': {'Min':'7' ,'Max':'9' },'LT': {'Min':'8' ,'Max':'8' },'LU': {'Min':'4' ,'Max':'11' },'MG': {'Min':'9' ,'Max':'10' },'MW': {'Min':'7' ,'Max':'8' },'MY': {'Min':'7' ,'Max':'9' },'MV': {'Min':'7' ,'Max':'7' },'ML': {'Min':'8' ,'Max':'8' },'MT': {'Min':'8' ,'Max':'8' },'MH': {'Min':'7' ,'Max':'7' },'MQ': {'Min':'9' ,'Max':'9' },'MR': {'Min':'7' ,'Max':'7' },'MU': {'Min':'7' ,'Max':'7' },'MX': {'Min':'10' ,'Max':'10' },'FM': {'Min':'7' ,'Max':'7' },'MD': {'Min':'8' ,'Max':'8' },'MC': {'Min':'5' ,'Max':'9' },'MN': {'Min':'7' ,'Max':'8' },'ME': {'Min':'4' ,'Max':'12' },'MS': {'Min':'10' ,'Max':'10' },'MA': {'Min':'9' ,'Max':'9' },'MZ': {'Min':'8' ,'Max':'9' },'NA': {'Min':'6' ,'Max':'10' },'NR': {'Min':'4' ,'Max':'7' },'NP': {'Min':'8' ,'Max':'9' },'NL': {'Min':'9' ,'Max':'9' },'AN': {'Min':'6' ,'Max':'8' },'NC': {'Min':'6' ,'Max':'6' },'NZ': {'Min':'3' ,'Max':'10' },'NI': {'Min':'8' ,'Max':'8' },'NE': {'Min':'8' ,'Max':'8' },'NG': {'Min':'7' ,'Max':'10' },'NU': {'Min':'4' ,'Max':'4' },'MP': {'Min':'10' ,'Max':'10' },'NO': {'Min':'5' ,'Max':'8' },'OM': {'Min':'7' ,'Max':'8' },'PK': {'Min':'8' ,'Max':'11' },'PW': {'Min':'7' ,'Max':'7' },'PA': {'Min':'7' ,'Max':'8' },'PG': {'Min':'4' ,'Max':'11' },'PY': {'Min':'5' ,'Max':'9' },'PE': {'Min':'8' ,'Max':'11' },'PH': {'Min':'8' ,'Max':'10' },'PL': {'Min':'6' ,'Max':'9' },'PT': {'Min':'9' ,'Max':'11' },'PR': {'Min':'10' ,'Max':'10' },'QA': {'Min':'6' ,'Max':'10' },'RO': {'Min':'9' ,'Max':'9' },'RU': {'Min':'10' ,'Max':'10' },'RW': {'Min':'9' ,'Max':'9' },'WS': {'Min':'3' ,'Max':'7' },'SM': {'Min':'6' ,'Max':'10' },'ST': {'Min':'7' ,'Max':'7' },'SA': {'Min':'8' ,'Max':'9' },'SN': {'Min':'9' ,'Max':'9' },'RS': {'Min':'4' ,'Max':'12' },'SC': {'Min':'6' ,'Max':'6' },'SL': {'Min':'8' ,'Max':'8' },'SG': {'Min':'8' ,'Max':'12' },'SK': {'Min':'4' ,'Max':'9' },'SI': {'Min':'8' ,'Max':'8' },'SB': {'Min':'5' ,'Max':'5' },'SO': {'Min':'5' ,'Max':'8' },'ZA': {'Min':'9' ,'Max':'9' },'ES': {'Min':'9' ,'Max':'9' },'LK': {'Min':'9' ,'Max':'9' },'SR': {'Min':'6' ,'Max':'7' },'SZ': {'Min':'7' ,'Max':'8' },'SE': {'Min':'7' ,'Max':'13' },'CH': {'Min':'4' ,'Max':'12' },'TW': {'Min':'8' ,'Max':'9' },'TJ': {'Min':'9' ,'Max':'9' },'TZ': {'Min':'9' ,'Max':'9' },'TH': {'Min':'8' ,'Max':'9' },'TG': {'Min':'7' ,'Max':'7' },'TK': {'Min':'4' ,'Max':'4' },'TO': {'Min':'5' ,'Max':'7' },'TT': {'Min':'10' ,'Max':'10' },'TN': {'Min':'8' ,'Max':'8' },'TR': {'Min':'10' ,'Max':'10' },'TM': {'Min':'8' ,'Max':'8' },'TC': {'Min':'10' ,'Max':'10' },'TV': {'Min':'5' ,'Max':'6' },'VI': {'Min':'10' ,'Max':'10' },'UG': {'Min':'9' ,'Max':'9' },'UA': {'Min':'9' ,'Max':'9' },'AE': {'Min':'8' ,'Max':'9' },'GB': {'Min':'7' ,'Max':'10' },'UY': {'Min':'4' ,'Max':'11' },'UZ': {'Min':'9' ,'Max':'9' },'VU': {'Min':'5' ,'Max':'7' },'VA': {'Min':'11' ,'Max':'11' },'VE': {'Min':'10' ,'Max':'10' },'VN': {'Min':'7' ,'Max':'10' },'WF': {'Min':'6' ,'Max':'6' },'YE': {'Min':'6' ,'Max':'9' },'ZM': {'Min':'9' ,'Max':'9' },'ZW': {'Min':'5' ,'Max':'9' }, 'CX':{'Min':'4' ,'Max':'15'} ,'CI':{'Min':'8' ,'Max':'8'},'MK':{'Min':'8' ,'Max':'8'}
+            },
+            "Languages": {
+                'ab':'Abkhazian', 'aa':'Afar', 'af':'Afrikaans', 'sq':'Albanian', 'am':'Amharic', 'ar':'Arabic', 'hy':'Armenian', 'as':'Assamese', 'ae':'Avestan', 'ay':'Aymara', 'az':'Azerbaijani', 'ba':'Bashkir', 'eu':'Basque', 'bn':'Bengali', 'dz':'Bhutani', 'bh':'Bihari', 'bi':'Bislama', 'bs':'Bosnian', 'br':'Breton', 'bg':'Bulgarian', 'my':'Burmese', 'be':'Byelorussian', 'km':'Cambodian', 'ca':'Catalan', 'ch':'Chamorro', 'ce':'Chechen', 'ny':'Chichewa', 'zh':'Chinese', 'cu':'Church', 'cv':'Chuvash', 'kw':'Cornish', 'co':'Corsican', 'hr':'Croatian', 'cs':'Czech', 'da':'Danish', 'nl':'Dutch', 'en':'English', 'eo':'Esperanto', 'et':'Estonian', 'fo':'Faeroese', 'fj':'Fiji', 'fi':'Finnish', 'fr':'French', 'fy':'Frisian', 'gd':'Gaelic', 'gl':'Galician', 'ka':'Georgian', 'de':'German', 'el':'Greek', 'kl':'Greenlandic', 'gn':'Guarani', 'gu':'Gujarati', 'ha':'Hausa', 'he':'Hebrew', 'hz':'Herero', 'hi':'Hindi', 'ho':'Hiri Motu', 'hu':'Hungarian', 'is':'Icelandic', 'io':'Ido', 'id':'Indonesian', 'ia':'Interlingua', 'ie':'Interlingue', 'iu':'Inuktitut', 'ik':'Inupiak', 'ga':'Irish', 'it':'Italian', 'ja':'Japanese', 'jv':'Javanese', 'kn':'Kannada', 'ks':'Kashmiri', 'kk':'Kazakh', 'ki':'Kikuyu', 'rw':'Kinyarwanda', 'ky':'Kirghiz', 'rn':'Kirundi', 'kv':'Komi', 'ko':'Korean', 'kj':'Kuanyama', 'ku':'Kurdish', 'lo':'Laothian', 'la':'Latin', 'lv':'Latvian', 'ln':'Lingala', 'lt':'Lithuanian', 'lb':'Luxembourgish', 'mk':'Macedonian', 'mg':'Malagasy', 'ms':'Malay', 'ml':'Malayalam', 'mt':'Maltese', 'gv':'Manx', 'mi':'Maori', 'mr':'Marathi', 'mh':'Marshallese', 'mo':'Moldavian', 'mn':'Mongolian', 'na':'Nauru', 'nv':'Navajo', 'ng':'Ndonga', 'ne':'Nepali', 'nd':'North Ndebele', 'se':'Northern Sami', 'no':'Norwegian', 'nb':'Norwegian Bokmål', 'nn':'Norwegian Nynorsk', 'oc':'Occitan', 'or':'Oriya', 'om':'Oromo', 'os':'Ossetian', 'pi':'Pali', 'ps':'Pashto', 'fa':'Persian', 'pl':'Polish', 'pt':'Portuguese', 'pa':'Punjabi', 'qu':'Quechua', 'rm':'Rhaeto-Romance', 'ro':'Romanian', 'ru':'Russian', 'sm':'Samoan', 'sg':'Sangro', 'sa':'Sanskrit', 'sc':'Sardinian', 'sr':'Serbian', 'sh':'Serbo-Croatian', 'st':'Sesotho', 'tn':'Setswana', 'sn':'Shona', 'sd':'Sindhi', 'si':'Singhalese', 'ss':'Siswati', 'sk':'Slovak', 'sl':'Slovenian', 'so':'Somali', 'nr':'South Ndebele', 'es':'Spanish', 'su':'Sudanese', 'sw':'Swahili', 'sv':'Swedish', 'tl':'Tagalog', 'ty':'Tahitian', 'tg':'Tajik', 'ta':'Tamil', 'tt':'Tatar', 'te':'Tegulu', 'th':'Thai', 'bo':'Tibetan', 'ti':'Tigrinya', 'to':'Tonga', 'ts':'Tsonga', 'tr':'Turkish', 'tk':'Turkmen', 'tw':'Twi', 'ug':'Uighur', 'uk':'Ukrainian', 'ur':'Urdu', 'uz':'Uzbek', 'vi':'Vietnamese', 'vo':'Volapuk', 'wa':'Walloon', 'cy':'Welsh', 'wo':'Wolof', 'xh':'Xhosa', 'yi':'Yiddish', 'yo':'Yoruba', 'za':'Zhuang', 'zu':'Zulu'
+            }
+        }
+        component.set("v.WWCE", WWCE);
+        //Consructing option and lables from the list for countries
+        var countryArray=[]
+        for(var eachKey in Object.keys(WWCE["Countries"])){
+            var countryMap={};
+            countryMap["value"]=Object.keys(WWCE["Countries"])[eachKey];
+            countryMap["label"]=WWCE["Countries"][countryMap["value"]];
+            countryArray.push(countryMap);
+        }
+        //Construction of map for language from the list of languages
+        var languageArray=[]
+        for(var eachKey in Object.keys(WWCE["Languages"])){
+            var languageMap={};
+            languageMap["value"]=Object.keys(WWCE["Languages"])[eachKey];
+            languageMap["label"]=WWCE["Languages"][languageMap["value"]];
+            languageArray.push(languageMap);
+        }
+        component.set("v.countryList", countryArray);
+        component.set("v.languageList", languageArray);
+    },
+    optInSave: function(component, event, helper, globalOptin, thirdPartyOptin,optTypeMessage) {
+        var action = component.get("c.saveOptIn");
+        var currentModel = component.get("v.accountDetailsModel");
+        var data={};
+        data["id"] = currentModel.id;
+        data["globalOptin"] = globalOptin;
+        data["thirdPartyOptin"] = thirdPartyOptin;
+        data["email"] = currentModel.email;
+        data["customerId"] = component.get("v.nucleusId");
+        helper.showSocialSpinner(component,event);
+        var toastEvent = $A.get("e.force:showToast");
+        action.setParams({
+            data : data,
+            caseId : component.get("v.caseId"),
+            accountId : component.get("v.accountId")
+        });
+        action.setCallback(this, <span class="fstat-no" title="function not covered" >function(response) {</span>
+<span class="cstat-no" title="statement not covered" >            var state = response.getState();</span>
+<span class="cstat-no" title="statement not covered" >            if (state === "SUCCESS") {</span>
+<span class="cstat-no" title="statement not covered" >                var storeResponse = response.getReturnValue();</span>
+<span class="cstat-no" title="statement not covered" >                var formattedString = JSON.parse(storeResponse).response[0];</span>
+<span class="cstat-no" title="statement not covered" >                currentModel.globalOptin = formattedString.globalOptin;</span>
+<span class="cstat-no" title="statement not covered" >                currentModel.thirdPartyOptin = formattedString.thirdPartyOptin;</span>
+<span class="cstat-no" title="statement not covered" >                helper.hideSocialSpinner(component,event);</span>
+                //Adding success toast
+<span class="cstat-no" title="statement not covered" >                toastEvent.setParams({</span>
+                    message: optTypeMessage,
+                    type: "success"
+                });
+<span class="cstat-no" title="statement not covered" >                toastEvent.fire();</span>
+            }
+        });
+        $A.enqueueAction(action);
+    },
+    //Adding the helper functionality to set temporary password as part of ticket TSM-1318
+    setTemporaryPassword: <span class="fstat-no" title="function not covered" >function(component, helper) {</span>
+<span class="cstat-no" title="statement not covered" >        var action = component.get("c.setTemporaryPassword");</span>
+<span class="cstat-no" title="statement not covered" >        var currentModel = component.get("v.accountDetailsModel");</span>
+<span class="cstat-no" title="statement not covered" >        var temporaryPassword = component.find("temporaryPassword").get("v.value");</span>
+<span class="cstat-no" title="statement not covered" >        var toastEvent = $A.get("e.force:showToast");</span>
+<span class="cstat-no" title="statement not covered" >        action.setParams({</span>
+            temporaryPassword : temporaryPassword,
+            customerId : currentModel.id,
+            caseId : component.get("v.caseId"),
+            strAccountId: component.get("v.accountId")
+        });
+<span class="cstat-no" title="statement not covered" >        action.setCallback(this, <span class="fstat-no" title="function not covered" >function(response) {</span></span>
+<span class="cstat-no" title="statement not covered" >            var state = response.getState();</span>
+<span class="cstat-no" title="statement not covered" >            if (state === "SUCCESS") {</span>
+<span class="cstat-no" title="statement not covered" >                var storeResponse = response.getReturnValue();</span>
+<span class="cstat-no" title="statement not covered" >                component.set('v.isSetTemporaryPasswordOpen', false);</span>
+                //Adding success toast
+<span class="cstat-no" title="statement not covered" >                toastEvent.setParams({</span>
+                    message: "A temporary password has been created!",
+                    type: "success"
+                });
+<span class="cstat-no" title="statement not covered" >                toastEvent.fire();</span>
+            }
+        });
+<span class="cstat-no" title="statement not covered" >        $A.enqueueAction(action);</span>
+    },
+    //Getting linked account
+    getLinkedAccount: <span class="fstat-no" title="function not covered" >function(component, event, helper) {</span>
+<span class="cstat-no" title="statement not covered" >        var action = component.get("c.getLinkedAccountByEmail");</span>
+<span class="cstat-no" title="statement not covered" >        var selectedEmail = event.srcElement.innerText;</span>
+<span class="cstat-no" title="statement not covered" >        var workspaceAPI = component.find("workspace");</span>
+<span class="cstat-no" title="statement not covered" >        var toastEvent = $A.get("e.force:showToast");</span>
+<span class="cstat-no" title="statement not covered" >        action.setParams({</span>
+            linkedEmail : selectedEmail,
+        });
+<span class="cstat-no" title="statement not covered" >        action.setCallback(this, <span class="fstat-no" title="function not covered" >function(response) {</span></span>
+<span class="cstat-no" title="statement not covered" >            var state = response.getState();</span>
+<span class="cstat-no" title="statement not covered" >            if (state === "SUCCESS") {</span>
+<span class="cstat-no" title="statement not covered" >                var storeResponse = response.getReturnValue();</span>
+<span class="cstat-no" title="statement not covered" >                workspaceAPI.getEnclosingTabId().then(<span class="fstat-no" title="function not covered" >function(tabId) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    workspaceAPI.openSubtab({</span>
+                        parentTabId: tabId,
+                        url: '/lightning/r/Account/'+storeResponse+'/view',
+                        focus: true
+                    });
+                })
+                .catch(<span class="fstat-no" title="function not covered" >function(error) {</span>
+<span class="cstat-no" title="statement not covered" >                    console.log(error);</span>
+                });
+            }else{
+                //Adding success toast
+<span class="cstat-no" title="statement not covered" >                toastEvent.setParams({</span>
+                    message: "No Account found!",
+                    type: "error"
+                });
+<span class="cstat-no" title="statement not covered" >                toastEvent.fire();</span>
+            }
+        });
+<span class="cstat-no" title="statement not covered" >        $A.enqueueAction(action);</span>
+    },
+    //Getting age requirements
+    getAgeRequirements: <span class="fstat-no" title="function not covered" >function(component, event, helper,fromDob) {</span>
+<span class="cstat-no" title="statement not covered" >        var action = component.get("c.getPlayerAgeRequirements");</span>
+<span class="cstat-no" title="statement not covered" >        var currentModel = component.get("v.accountDetailsModel");</span>
+<span class="cstat-no" title="statement not covered" >        var currentAge = this.getAge(currentModel.dob);</span>
+<span class="cstat-no" title="statement not covered" >        var toastEvent = $A.get("e.force:showToast");</span>
+<span class="cstat-no" title="statement not covered" >        action.setParams({</span>
+            countryCode : currentModel.country,
+        });
+<span class="cstat-no" title="statement not covered" >        action.setCallback(this, <span class="fstat-no" title="function not covered" >function(response) {</span></span>
+<span class="cstat-no" title="statement not covered" >            var state = response.getState();</span>
+<span class="cstat-no" title="statement not covered" >            if (state === "SUCCESS") {</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                const accountforms = component.find("accountform");</span>
+<span class="cstat-no" title="statement not covered" >                const isFormAvaialble = Array.isArray(accountforms) &amp;&amp; accountforms[3];</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                if(currentAge &lt;=0 &amp;&amp; isFormAvaialble){</span>
+<span class="cstat-no" title="statement not covered" >                    accountforms[3].setCustomValidity('Invalid Date of Birth');</span>
+                }
+                else <span class="cstat-no" title="statement not covered" >if(currentAge &gt;0 &amp;&amp; isFormAvaialble){</span>
+<span class="cstat-no" title="statement not covered" >                    accountforms[3].setCustomValidity('');</span>
+                }
+<span class="cstat-no" title="statement not covered" >                if(isFormAvaialble){</span>
+<span class="cstat-no" title="statement not covered" >                    accountforms[3].reportValidity();</span>
+                }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                var storeResponse = JSON.parse(response.getReturnValue()).response[0];</span>
+<span class="cstat-no" title="statement not covered" >                if(currentAge &lt; parseInt(storeResponse.minLegalRegistrationAge)&amp;&amp;currentAge&gt;0&amp;&amp;currentAge!=0){</span>
+<span class="cstat-no" title="statement not covered" >                    component.set("v.underAgeAccount", true);</span>
+                    //Adding warning toast
+<span class="cstat-no" title="statement not covered" >                    toastEvent.setParams({</span>
+                        message: "The change will convert the account into a minor account.",
+                        type: "warning"
+                    });
+<span class="cstat-no" title="statement not covered" >					if(fromDob==true)</span>
+<span class="cstat-no" title="statement not covered" >                    toastEvent.fire();</span>
+&nbsp;
+                }else{
+<span class="cstat-no" title="statement not covered" >                    component.set("v.underAgeAccount", false);</span>
+                }
+            }
+        });
+<span class="cstat-no" title="statement not covered" >        $A.enqueueAction(action);</span>
+    },
+    getAge: <span class="fstat-no" title="function not covered" >function(dateString)</span>
+    {
+<span class="cstat-no" title="statement not covered" >        var today = new Date();</span>
+<span class="cstat-no" title="statement not covered" >        var birthDate = new Date(dateString);</span>
+<span class="cstat-no" title="statement not covered" >        var age = today.getFullYear() - birthDate.getFullYear();</span>
+<span class="cstat-no" title="statement not covered" >        var month = today.getMonth() - birthDate.getMonth();</span>
+<span class="cstat-no" title="statement not covered" >        if (month &lt; 0 || (month === 0 &amp;&amp; today.getDate() &lt; birthDate.getDate()))</span>
+        {
+<span class="cstat-no" title="statement not covered" >            age--;</span>
+        }
+<span class="cstat-no" title="statement not covered" >        return age;</span>
+    },
+    enableOrDisableSaveButton: <span class="fstat-no" title="function not covered" >function(component){</span>
+<span class="cstat-no" title="statement not covered" >        var disableSave = component.get('v.disableSave');</span>
+<span class="cstat-no" title="statement not covered" >        var fname = component.find("accountform")[0].get('v.value'),</span>
+            lname = component.find("accountform")[1].get('v.value'),
+            persona = component.find("accountform")[2].get('v.value'),
+            primaryEmail = component.find("accountform")[4].get('v.value'),
+            country = component.find("accountform")[6].get('v.value'),
+            language = component.find("accountform")[7].get('v.value'),
+            customerValue = component.find("accountform")[0].get('v.value');
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        if(fname !='' &amp;&amp; lname !='' &amp;&amp; persona !='' &amp;&amp; primaryEmail !='' &amp;&amp; country !='' &amp;&amp; language !=''){</span>
+<span class="cstat-no" title="statement not covered" >            component.set('v.disableSave', false);</span>
+        }
+        else{
+<span class="cstat-no" title="statement not covered" >            component.set('v.disableSave', true);</span>
+        }
+    },
+&nbsp;
+	//TSM-1931
+    // Checking Email Verified or Not
+	updateEmailFlag: <span class="fstat-no" title="function not covered" >function (component, event, helper) {</span>
+<span class="cstat-no" title="statement not covered" >        var caseId = component.get("v.caseId");</span>
+<span class="cstat-no" title="statement not covered" >        var action = component.get("c.updateEmailCaseFlag");</span>
+<span class="cstat-no" title="statement not covered" >        action.setParams({</span>
+            caseID: caseId
+        });
+<span class="cstat-no" title="statement not covered" >        action.setCallback(this, <span class="fstat-no" title="function not covered" >function (response) {</span></span>
+<span class="cstat-no" title="statement not covered" >            var state = response.getState();</span>
+<span class="cstat-no" title="statement not covered" >            if (state === 'SUCCESS') {</span>
+<span class="cstat-no" title="statement not covered" >                console.log('Check Email Status: '+response.getReturnValue());</span>
+            }
+        });
+<span class="cstat-no" title="statement not covered" >        $A.enqueueAction(action);</span>
+    },
+&nbsp;
+	updateSecondaryEmail : <span class="fstat-no" title="function not covered" >function(component, event,helper) {</span>
+<span class="cstat-no" title="statement not covered" >        var action = component.get("c.updateSecondaryEmail");</span>
+<span class="cstat-no" title="statement not covered" >        var accountDetails = component.get("v.accountDetailsModel");</span>
+<span class="cstat-no" title="statement not covered" >        var requestObject = {};</span>
+<span class="cstat-no" title="statement not covered" >        var toastEvent = $A.get("e.force:showToast");</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        requestObject.AccountId = component.get("v.accountId");</span>
+<span class="cstat-no" title="statement not covered" >        requestObject.customerId = accountDetails.id;</span>
+<span class="cstat-no" title="statement not covered" >        requestObject.caseId = component.get("v.caseId");</span>
+<span class="cstat-no" title="statement not covered" >        requestObject.secondaryEmail = accountDetails.secondaryEmail;</span>
+<span class="cstat-no" title="statement not covered" >        requestObject.oldSecondaryEmail = component.get("v.secondaryOldEmailValue");</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        action.setParams({</span>
+            reqParams : requestObject
+        });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        action.setCallback(this, <span class="fstat-no" title="function not covered" >function(response) {</span></span>
+<span class="cstat-no" title="statement not covered" >            var state = response.getState();</span>
+<span class="cstat-no" title="statement not covered" >            if (state === "SUCCESS") {</span>
+<span class="cstat-no" title="statement not covered" >                helper.saveCustomer(component, event, helper);</span>
+<span class="cstat-no" title="statement not covered" >                toastEvent.setParams({</span>
+                    "message": "Secondary Email validated successfully!",
+                    "type": "success"
+                });
+            } else {
+<span class="cstat-no" title="statement not covered" >                helper.saveCustomer(component, event, helper);</span>
+<span class="cstat-no" title="statement not covered" >                var errors = response.getError();</span>
+<span class="cstat-no" title="statement not covered" >                if (errors[0] &amp;&amp; errors[0].message) {</span>
+<span class="cstat-no" title="statement not covered" >                    toastEvent.setParams({</span>
+                        "message": errors[0].message,
+                        "type" : "error"
+                    });
+                } else {
+<span class="cstat-no" title="statement not covered" >                    toastEvent.setParams({</span>
+                        "message": "Secondary Email couldn’t be validated!",
+                        "type" : "error"
+                    });
+                }
+            }
+<span class="cstat-no" title="statement not covered" >            toastEvent.fire();</span>
+        });
+<span class="cstat-no" title="statement not covered" >        $A.enqueueAction(action);</span>
+	},
+&nbsp;
+    secondaryEmailVerification : <span class="fstat-no" title="function not covered" >function(component, event, helper) {</span>
+<span class="cstat-no" title="statement not covered" >        var action = component.get("c.getSecondaryEmailCode");</span>
+<span class="cstat-no" title="statement not covered" >        var accountDetails = component.get("v.accountDetailsModel");</span>
+<span class="cstat-no" title="statement not covered" >        var toastEvent = $A.get("e.force:showToast");</span>
+<span class="cstat-no" title="statement not covered" >        var requestObject = {};</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        requestObject.AccountId = component.get("v.accountId");</span>
+<span class="cstat-no" title="statement not covered" >        requestObject.customerId = accountDetails.id;</span>
+<span class="cstat-no" title="statement not covered" >        requestObject.caseId = component.get("v.caseId");</span>
+<span class="cstat-no" title="statement not covered" >        requestObject.secondaryEmail = accountDetails.secondaryEmail;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        action.setParams({</span>
+            reqParams : requestObject
+        });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        action.setCallback(this, <span class="fstat-no" title="function not covered" >function(response) {</span></span>
+<span class="cstat-no" title="statement not covered" >            var state = response.getState();</span>
+<span class="cstat-no" title="statement not covered" >            if (state === "SUCCESS") {</span>
+<span class="cstat-no" title="statement not covered" >                component.set("v.verificationCode", JSON.parse(response.getReturnValue()).response.securityCode);</span>
+<span class="cstat-no" title="statement not covered" >                component.set("v.isEmailVerificationOpen", true);</span>
+<span class="cstat-no" title="statement not covered" >                console.log("Secondary Email Verification Code Sent!");</span>
+&nbsp;
+            } else {
+<span class="cstat-no" title="statement not covered" >                helper.saveCustomer(component, event, helper);</span>
+<span class="cstat-no" title="statement not covered" >                var errors = response.getError();</span>
+<span class="cstat-no" title="statement not covered" >                if (errors[0] &amp;&amp; errors[0].message) {</span>
+<span class="cstat-no" title="statement not covered" >                    toastEvent.setParams({</span>
+                        "message": errors[0].message,
+                        "type" : "error"
+                    });
+<span class="cstat-no" title="statement not covered" >                    toastEvent.fire();</span>
+                } else {
+<span class="cstat-no" title="statement not covered" >                    console.log("Secondary Email Verification Code couldn’t Sent!");</span>
+                }
+            }
+        });
+<span class="cstat-no" title="statement not covered" >        $A.enqueueAction(action);</span>
+	},
+&nbsp;
+    dltSecondaryEmail : <span class="fstat-no" title="function not covered" >function(component, event, helper) {</span>
+<span class="cstat-no" title="statement not covered" >        var action = component.get("c.deleteSecondaryEmail");</span>
+<span class="cstat-no" title="statement not covered" >        var accountDetails = component.get("v.accountDetailsModel");</span>
+<span class="cstat-no" title="statement not covered" >        var toastEvent = $A.get("e.force:showToast");</span>
+<span class="cstat-no" title="statement not covered" >        var requestObject = {};</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        requestObject.AccountId = component.get("v.accountId");</span>
+<span class="cstat-no" title="statement not covered" >        requestObject.customerId = accountDetails.id;</span>
+<span class="cstat-no" title="statement not covered" >        requestObject.caseId = component.get("v.caseId");</span>
+<span class="cstat-no" title="statement not covered" >        requestObject.secondaryEmail = component.get("v.secondaryOldEmailValue");</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        action.setParams({</span>
+            reqParams : requestObject
+        });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        action.setCallback(this, <span class="fstat-no" title="function not covered" >function(response) {</span></span>
+<span class="cstat-no" title="statement not covered" >            var state = response.getState();</span>
+<span class="cstat-no" title="statement not covered" >            if (state === "SUCCESS") {</span>
+<span class="cstat-no" title="statement not covered" >                helper.saveCustomer(component, event, helper);</span>
+<span class="cstat-no" title="statement not covered" >                toastEvent.setParams({</span>
+                    "message": "Secondary Email has been removed!",
+                    "type": "success"
+                });
+&nbsp;
+            } else {
+<span class="cstat-no" title="statement not covered" >                helper.saveCustomer(component, event, helper);</span>
+<span class="cstat-no" title="statement not covered" >                var errors = response.getError();</span>
+<span class="cstat-no" title="statement not covered" >                if (errors[0] &amp;&amp; errors[0].message) {</span>
+<span class="cstat-no" title="statement not covered" >                    toastEvent.setParams({</span>
+                        "message": errors[0].message,
+                        "type" : "error"
+                    });
+                } else {
+<span class="cstat-no" title="statement not covered" >                    toastEvent.setParams({</span>
+                        "message": "Secondary Email couldn’t remove!",
+                        "type" : "error"
+                    });
+                }
+            }
+<span class="cstat-no" title="statement not covered" >            toastEvent.fire();</span>
+        });
+<span class="cstat-no" title="statement not covered" >        $A.enqueueAction(action);</span>
+    },
+	addPersona: <span class="fstat-no" title="function not covered" >function(component,event,helper){</span>
+<span class="cstat-no" title="statement not covered" >        var personaName = component.get("v.personaName");</span>
+<span class="cstat-no" title="statement not covered" >        var namespace = component.get("v.namespace");</span>
+<span class="cstat-no" title="statement not covered" >        var caseObj= component.get("v.caseObj");</span>
+<span class="cstat-no" title="statement not covered" >        var requestObject ={};</span>
+<span class="cstat-no" title="statement not covered" >        var data = {};</span>
+<span class="cstat-no" title="statement not covered" >        requestObject['caseId'] = caseObj.Id;</span>
+<span class="cstat-no" title="statement not covered" >        requestObject['accountId'] = caseObj.AccountId;</span>
+<span class="cstat-no" title="statement not covered" >        requestObject['customerId']= component.get("v.nucleusId");</span>
+<span class="cstat-no" title="statement not covered" >        data['statusReasonCode']='NONE';</span>
+<span class="cstat-no" title="statement not covered" >        data['namespace']=namespace;</span>
+<span class="cstat-no" title="statement not covered" >        data['name']=personaName;</span>
+<span class="cstat-no" title="statement not covered" >        data['displayName']=personaName;</span>
+<span class="cstat-no" title="statement not covered" >        requestObject['data']=JSON.stringify(data);</span>
+<span class="cstat-no" title="statement not covered" >        console.log('requestObject ::',requestObject, 'stringified ::', JSON.stringify(requestObject));</span>
+<span class="cstat-no" title="statement not covered" >        var action=component.get("c.addPersona");</span>
+<span class="cstat-no" title="statement not covered" >        var toastEvent = $A.get("e.force:showToast");</span>
+<span class="cstat-no" title="statement not covered" >        var toastEventPartialError = $A.get("e.force:showToast");</span>
+<span class="cstat-no" title="statement not covered" >        action.setParams({</span>
+            reqParameters:requestObject
+        });
+<span class="cstat-no" title="statement not covered" >        action.setCallback(this,<span class="fstat-no" title="function not covered" >function(response){</span></span>
+<span class="cstat-no" title="statement not covered" >            console.log('response  after addPersona ::', response.getReturnValue(), 'CallbackSatte ::', response.getState(), 'Error msg::',response.getError());</span>
+<span class="cstat-no" title="statement not covered" >            if(response.getState()==='SUCCESS'){</span>
+<span class="cstat-no" title="statement not covered" >                component.set("v.openSpinner",false);</span>
+<span class="cstat-no" title="statement not covered" >            	component.set("v.newPersonaModal",false);</span>
+<span class="cstat-no" title="statement not covered" >                component.set("v.personaName",'');</span>
+<span class="cstat-no" title="statement not covered" >                component.find("addPersona")[1].set("v.value",'');</span>
+<span class="cstat-no" title="statement not covered" >               this.searchCustomerData(component,event,helper);</span>
+           // var refreshEvent = component.getEvent("refreshPersonaGrid");
+           //refreshEvent.fire();
+<span class="cstat-no" title="statement not covered" >           toastEvent.setParams({</span>
+                   "type":'success',
+                   "message": "Persona successfully added."//response.getError()//
+               });
+<span class="cstat-no" title="statement not covered" >               toastEvent.fire();</span>
+&nbsp;
+&nbsp;
+            }
+            else <span class="cstat-no" title="statement not covered" >if(response.getState()==='ERROR'){</span>
+<span class="cstat-no" title="statement not covered" >                var errorMsg = response.getError()[0].message;</span>
+<span class="cstat-no" title="statement not covered" >                console.log('errorMsg ::',errorMsg);</span>
+<span class="cstat-no" title="statement not covered" >                if(errorMsg.includes("SOVEREIGN_RESPONSE:ERROR")){</span>
+<span class="cstat-no" title="statement not covered" >                    console.log('error while adding persona ::', response.getError());</span>
+<span class="cstat-no" title="statement not covered" >                    component.set("v.openSpinner",false);</span>
+<span class="cstat-no" title="statement not covered" >                    component.set("v.newPersonaModal",false);</span>
+<span class="cstat-no" title="statement not covered" >                    component.set("v.personaName",'');</span>
+<span class="cstat-no" title="statement not covered" >                    component.find("addPersona")[1].set("v.value",'');</span>
+<span class="cstat-no" title="statement not covered" >                    toastEvent.setParams({</span>
+                        "type":'error',
+                        "message": "Something went wrong.Please contact your IT."//response.getError()//
+                    });
+<span class="cstat-no" title="statement not covered" >                    toastEvent.fire();</span>
+                }
+                else <span class="cstat-no" title="statement not covered" >if(errorMsg.includes("SOVEREIGN_RESPONSE:SUCCESS")){</span>
+<span class="cstat-no" title="statement not covered" >                    console.log('error while adding persona success::', response.getError());</span>
+<span class="cstat-no" title="statement not covered" >                    component.set("v.openSpinner",false);</span>
+<span class="cstat-no" title="statement not covered" >                    component.set("v.newPersonaModal",false);</span>
+<span class="cstat-no" title="statement not covered" >                    component.set("v.personaName",'');</span>
+<span class="cstat-no" title="statement not covered" >                    this.searchCustomerData(component,event,helper);</span>
+<span class="cstat-no" title="statement not covered" >                    toastEvent.setParams({</span>
+                        "type":'success',
+                        "message": "Persona successfully added"//response.getError()//
+                    });
+<span class="cstat-no" title="statement not covered" >                    toastEventPartialError.setParams({</span>
+                        'type':'error',
+                        'message':'Something went wrong in logging event. Contact your IT.'
+                    })
+<span class="cstat-no" title="statement not covered" >                    toastEvent.fire();/</span>/firing success
+<span class="cstat-no" title="statement not covered" >                    toastEventPartialError.fire();/</span>/firing error
+                }
+&nbsp;
+            }
+        });
+<span class="cstat-no" title="statement not covered" >        $A.enqueueAction(action);</span>
+&nbsp;
+&nbsp;
+    },
+	setNamespaces: <span class="fstat-no" title="function not covered" >function(component,event,helper){</span>
+<span class="cstat-no" title="statement not covered" >	   var action= component.get("c.getPersonaNameSpaces");</span>
+<span class="cstat-no" title="statement not covered" >        action.setCallback(this,<span class="fstat-no" title="function not covered" >function(response){</span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >            var jsonNameSpaces = response.getReturnValue();</span>
+<span class="cstat-no" title="statement not covered" >            console.log('jsonNameSpaces ::',jsonNameSpaces);</span>
+<span class="cstat-no" title="statement not covered" >            var parsedResponse = JSON.parse(jsonNameSpaces);</span>
+<span class="cstat-no" title="statement not covered" >            console.log('nameSpaces array ::', parsedResponse[0]);</span>
+<span class="cstat-no" title="statement not covered" >            var namaSpaceList =[];</span>
+<span class="cstat-no" title="statement not covered" >            for(var i=0;i&lt;parsedResponse.length;i++){</span>
+<span class="cstat-no" title="statement not covered" >                namaSpaceList.push(parsedResponse[i].name);</span>
+            }
+<span class="cstat-no" title="statement not covered" >            var nameSpacesArray = Object.keys(namaSpaceList).map(<span class="fstat-no" title="function not covered" >function(key){</span></span>
+<span class="cstat-no" title="statement not covered" >                var key1 = namaSpaceList[key].charAt(0).toUpperCase() + namaSpaceList[key].slice(1).toLowerCase(); </span>//capitalize starting letter and remove caps of other letters
+<span class="cstat-no" title="statement not covered" >                var reasonLabelKey = key1.replace(/_/g, " "); </span>//replacing underscores with spaces
+<span class="cstat-no" title="statement not covered" >                return {label: namaSpaceList[key], value: namaSpaceList[key]}</span>
+            });
+<span class="cstat-no" title="statement not covered" >            console.log('nameSpacesArray final ::',nameSpacesArray);</span>
+<span class="cstat-no" title="statement not covered" >            component.set("v.personaNamespace",nameSpacesArray);</span>
+        });
+<span class="cstat-no" title="statement not covered" >        $A.enqueueAction(action);</span>
+&nbsp;
+    }
+})
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Jun 27 2019 21:49:35 GMT+0530 (India Standard Time)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

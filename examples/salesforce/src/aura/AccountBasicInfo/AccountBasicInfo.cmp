@@ -1,0 +1,726 @@
+<aura:component controller="AccountBasicInfoAuraController"
+    implements="flexipage:availableForAllPageTypes,force:appHostable"
+    access="global">
+    <ltng:require styles="{!$Resource.multilineToastCSS}" />
+    <!-- Component Event to bubble up the outboundEmail details TSM 1912-->
+    <aura:registerEvent name="sendOutboundEmailIdEvt" type="c:resetPwdCmpEvt" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <!-- Hardcoded for now will change once dynamic loading is implemented -->
+    <aura:attribute name="caseId" type="Id" />
+    <aura:attribute name="accountId" type="Id" />
+    <aura:attribute name="caseObj" type="Object" /> <!-- TSM 1912 -->
+    <aura:attribute name="gridColumns" type="List" access="PRIVATE" />
+    <aura:attribute name="gridData" type="Object" access="PRIVATE" />
+    <aura:attribute name="personaData" type="List" default="[]" />
+    <aura:attribute name="updateFlag" type="boolean" default="false" />
+    <aura:attribute name="accountDetailsModel" type="Object" />
+    <aura:attribute name="oldModel" type="Object" />
+    <aura:attribute name="tempModel" type="Object" />
+    <aura:attribute name="isEdit" type="boolean" default="false" />
+    <aura:attribute name="isOpen" type="boolean" default="true" />
+    <aura:attribute name="isAccountObject" type="boolean" />
+    <aura:attribute name="Spinner" type="boolean" default="false" />
+    <aura:attribute name="isLoading" type="boolean" default="false" />    <!-- TSM 1912 -->
+    <aura:attribute name="WWCE" type="Object" />
+    <aura:attribute name="languageList" type="List" />
+    <aura:attribute name="countryList" type="List" />
+    <aura:attribute name="selectConfig" type="Object" />
+    <aura:attribute name="tempLanguage" type="String" />
+    <aura:attribute name="oldLanguage" type="String" />
+    <aura:attribute name="oldCustomerValue" type="String" />
+    <aura:attribute name="socialSpinner" type="boolean" default="false" />
+    <aura:attribute name="optInGlobal" type="boolean" default="false" />
+    <aura:attribute name="optInThirdParty" type="boolean" default="false" />
+    <aura:attribute name="processingData" type="boolean" default="true" />
+    <aura:attribute name="toResetPasswordEmail" type="String"/>
+    <aura:attribute name="accountInfoChange" type="boolean" default="false"/>
+    <aura:attribute name="isResetPasswordOpen" type="boolean" default="false" />
+    <aura:attribute name="isSetTemporaryPasswordOpen" type="boolean" default="false" />
+    <aura:attribute name="underAgeAccount" type="boolean" default="false" />
+    <aura:attribute name="temporaryPasswordValidation" type="String" default="false" />
+    <aura:attribute name="disableSave" type="boolean" default="true" />
+    <aura:attribute name="oldEmailValue" type="String" /> <!-- TSM-1931 -->
+    <aura:attribute name="nucleusId" type="Id"/>
+    <aura:attribute name="isEmailVerificationOpen" type="Boolean" access="private" default="false" />
+    <aura:attribute name="isSuccessDisable" type="Boolean" access="private" default="true" />
+    <aura:attribute name="isCodeError" type="Boolean" access="private" default="fasle" />
+    <aura:attribute name="isSecondaryEmailUpdated" type="Boolean" access="private" />
+    <aura:attribute name="verificationCode" type="String" access="private"/>
+    <aura:attribute name="secondaryOldEmailValue" type="String" access="private"/>
+    
+	<aura:attribute name="personaName" type="String"/>
+    <aura:attribute name="personaNamespace" type="List"  default="[
+                                                                     {'label': 'nx', 'value': 'nx'},
+                                                                     {'label': 'xbox', 'value': 'xbox'},
+                                                                     
+                                                                     {'label':'wii','value':'wii'},
+                                                                   
+                                                                     {'label':'cem_ea_id','value':'cem_ea_id'}
+                                                                     
+                                                                     ]"/>
+    <aura:attribute name="newPersonaModal" type="Boolean" default="false"/>
+    <aura:attribute name="addPersonaDisable" type="Boolean" default="true"/>
+	<aura:attribute name="openSpinner" type="Boolean" default="false"/>
+	<aura:attribute name="isEditPersona" type="Boolean" default="true"/>
+    <aura:attribute name="namespace" type="String"/>
+    <aura:attribute name="externalData" type="Map" default="{}" />
+	
+	<!--tsm 1911-->
+	<aura:attribute name="prevDob" type="String" />
+    <aura:attribute name="newDob" type="String" />
+	<aura:attribute name="openUnderAgeModal" type="Boolean" default="false"/>
+	<!-- TSM-3843 -->
+    <aura:attribute name="parentEmailFlag" type="Boolean" default="false"/>
+    <!-- Function used to initilize the masking data TSM-2577 -->
+    <aura:attribute name="accountMaskingList" type="Map" />
+    
+    <lightning:workspaceAPI aura:id="workspace" />
+    
+    <aura:attribute name="customerValue" type="List"
+                    default="[{'label': 'None', 'value': 'NONE'},{'label': 'Platinum', 'value': 'PLATINUM'},{'label': 'Gold', 'value': 'GOLD'},{'label': 'Silver', 'value': 'SILVER'}
+                             ,{'label': 'Bronze', 'value': 'BRONZE'}]" />
+    
+    <aura:handler name="change" value="{!v.updateFlag}"
+                  action="{!c.doInit}" />
+	<aura:handler name="refreshPersonaGrid" event="c:RefreshPersona" action="{!c.handlePersonaRefresh}"/> 				  
+	<aura:registerEvent name="onSaveAccount" type="c:RefreshAccount" />
+    
+    <div class="c-container slds-is-relative">
+        
+        <div class="slds-m-top--x-small">
+            <!-- Account Info section -->
+            <lightning:layout class="slds-m-bottom--large">
+                <lightning:layoutItem size="4">
+                    <div class="text-bold">Account Info</div>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="8">
+                    <aura:if isTrue="{!v.isOpen}">
+                        <div class="accountGroupButtons">
+                            <lightning:button class="margin-right-custom" variant="neutral" onclick="{!c.openResetPassword}" label="Reset Password" disabled="{! not(v.accountMaskingList.ResetPassword)}"/>
+                            <lightning:button class="margin-right-custom" variant="neutral" onclick="{!c.openTemporaryPassword}"
+                                              label="Set Temporary Password" disabled="{! not(v.accountMaskingList.TemporaryPassword)}"/>
+                            <lightning:button onclick="{!c.openEditView}" variant="neutral"
+                                              label="Edit" disabled="{! not(v.accountMaskingList.EditAccount)}"/>
+                        </div>
+                    </aura:if>
+                    <aura:if isTrue="{!v.isEdit}">
+                        <div class="accountGroupButtons">
+                            <lightning:button class="margin-right-custom" onclick="{!c.accountButtonEvent}"
+                                              variant="neutral" label="Cancel" />
+                            <lightning:button onclick="{!c.accountButtonEvent}"
+                                              variant="brand" label="Save" disabled="{!v.disableSave}" />
+                        </div>
+                    </aura:if>
+                </lightning:layoutItem>
+            </lightning:layout>
+            <lightning:layout class="slds-m-bottom--medium">
+                <aura:if isTrue="{!v.isOpen}">
+                    <lightning:layoutItem size="4">
+                        <div class="slds-text-body_small edit-field-label">First Name</div>
+                        <div class="slds-text-body_regular wrap-text slds-size_11-of-12"><bdi>{!v.accountDetailsModel.firstName}</bdi></div>
+                    </lightning:layoutItem>
+                    
+                    <lightning:layoutItem size="4">
+                        <div class="slds-text-body_small edit-field-label">Last Name</div>
+                        <div class="slds-text-body_regular wrap-text slds-size_11-of-12"><bdi>{!v.accountDetailsModel.lastName}</bdi></div>
+                    </lightning:layoutItem>
+                </aura:if>
+                
+                <aura:if isTrue="{!v.isEdit}">
+                    <lightning:layoutItem size="4">
+                        <lightning:input class="slds-size_11-of-12" aura:id="accountform" name="firstName"
+                                         label="First Name" value="{!v.accountDetailsModel.firstName}" maxlength="64" onchange="{! c.handleAccountChange }"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="4">
+                        <lightning:input class="slds-size_11-of-12" aura:id="accountform" name="lastName"
+                                         label="Last Name" value="{!v.accountDetailsModel.lastName}" maxlength="64" onchange="{! c.handleAccountChange }"/>
+                    </lightning:layoutItem>
+                </aura:if>
+                
+                <lightning:layoutItem size="4">
+                    <aura:if isTrue="{!v.isOpen}">
+                        <div class="slds-text-body_small edit-field-label">Persona</div>
+                        <aura:if isTrue="{!v.accountDetailsModel.persona != null}">
+                            <div class="slds-text-body_regular wrap-text slds-size_11-of-12">{!v.accountDetailsModel.persona} ({!v.accountDetailsModel.personaId})</div>
+                        </aura:if>
+                    </aura:if>
+                    <aura:if isTrue="{!v.isEdit}">
+                        <lightning:input class="slds-size_11-of-12" aura:id="accountform" label="Persona"
+                                         name="persona" value="{!v.accountDetailsModel.persona}" onchange="{! c.handleAccountChange }"/>
+                    </aura:if>
+                </lightning:layoutItem>
+            </lightning:layout>
+            
+            <lightning:layout class="slds-m-bottom--medium">
+                <lightning:layoutItem size="4">
+                    <aura:if isTrue="{!v.isOpen}">
+                        <div class="slds-text-body_small edit-field-label">Date of
+                            Birth (Optional)</div>
+                        <div class="slds-text-body_regular">
+                            <c:FormattedDateTime value="{!v.accountDetailsModel.dob}" format="only-date"/>
+                        </div>
+                    </aura:if>
+                    <aura:if isTrue="{!v.isEdit}">
+                        <lightning:input aura:id="accountform" type="date"
+                                         label="Date of Birth (Optional)" name="dob"                        
+                                         value="{!v.accountDetailsModel.dob}"                                         
+                                         onchange="{! c.handleDobChange }" class="formatted-date-input slds-size_11-of-12"/>
+                    </aura:if>
+                </lightning:layoutItem>
+                
+                <lightning:layoutItem size="4">
+                    <aura:if isTrue="{!v.isOpen}">
+                        <div class="slds-text-body_small edit-field-label">Primary
+                            Email</div>
+                        <div class="slds-text-body_regular wrap-text slds-size_11-of-12">{!v.accountDetailsModel.email}</div>
+                    </aura:if>
+                    <aura:if isTrue="{!v.isEdit}">
+                        <lightning:input class="slds-size_11-of-12" aura:id="accountform" label="Primary Email"
+                                         name="email" value="{!v.accountDetailsModel.email}" onchange="{! c.handleAccountChange }" pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$" messageWhenPatternMismatch  ="You have entered an invalid format" />
+                    </aura:if>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="4">
+                    <aura:if isTrue="{!v.isOpen}">
+                        <div class="slds-text-body_small edit-field-label">Secondary
+                            Email (Optional)</div>
+                        <aura:if isTrue="{!v.accountDetailsModel.secondaryEmail != null}">
+                            <div class="slds-text-body_regular wrap-text slds-size_11-of-12">{!v.accountDetailsModel.secondaryEmail}</div>
+                        </aura:if>    
+                        
+                        <aura:if isTrue="{!v.accountDetailsModel.secondaryEmail == null}">
+                            <div class="slds-text-body_regular wrap-text slds-size_11-of-12">N/A</div>
+                        </aura:if> 
+                    </aura:if>
+                    <aura:if isTrue="{!v.isEdit}">
+                        <lightning:input class="slds-size_11-of-12" aura:id="accountform" label="Secondary Email (Optional)"
+                                         name="parentalEmail" 
+                                         value="{!v.accountDetailsModel.secondaryEmail}" pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$" messageWhenPatternMismatch  ="You have entered an invalid format"/>
+                    </aura:if>
+                </lightning:layoutItem>
+            </lightning:layout>
+            
+            <lightning:layout class="slds-m-bottom--medium">
+                <lightning:layoutItem size="4">
+                    <aura:if isTrue="{!v.isOpen}">
+                        <div class="slds-text-body_small edit-field-label">Country</div>
+                        <div class="slds-text-body_regular">{!v.selectConfig.currentCountry}</div>
+                    </aura:if>
+                    <aura:if isTrue="{!v.isEdit}">
+                        <lightning:combobox class="slds-size_11-of-12" aura:id="accountform" name="country"
+                                            label="Country" value="{!v.accountDetailsModel.country}"
+                                            placeholder="" onchange="{! c.handleCountryChange }" options="{!v.countryList}" />
+                    </aura:if>
+                </lightning:layoutItem>
+                
+                <lightning:layoutItem size="4">
+                    <aura:if isTrue="{!v.isOpen}">
+                        <div class="slds-text-body_small edit-field-label">Language</div>
+                        <div class="slds-text-body_regular">{!v.selectConfig.currentLanguage}</div>
+                    </aura:if>
+                    <aura:if isTrue="{!v.isEdit}">                        
+                        <lightning:combobox class="slds-size_11-of-12" aura:id="accountform" name="language"
+                                            label="Language" value="{!v.selectConfig.language}" placeholder=""
+                                            onchange="{! c.handleLanguageChange }" options="{!v.languageList}"/>
+                    </aura:if>
+                </lightning:layoutItem>
+                
+                <lightning:layoutItem size="4">
+                    <aura:if isTrue="{!v.isOpen}">
+                        <div class="slds-text-body_small edit-field-label">Phone
+                            Number (Optional)</div>
+                        <aura:if isTrue="{!v.accountDetailsModel.phone == null}">
+                            <div class="slds-text-body_regular">N/A</div>
+                        </aura:if> 
+                        
+                        <aura:if isTrue="{!v.accountDetailsModel.phone != null}">
+                            <div class="slds-text-body_regular">
+                                <lightning:clickToDial recordId="{!v.caseId}" value='{!v.accountDetailsModel.phone}'/>
+                            </div>
+                        </aura:if>     
+                    </aura:if>
+                    <aura:if isTrue="{!v.isEdit}">
+                        <lightning:input class="slds-size_11-of-12" type="tel" aura:id="accountform"
+                                         label="Phone Number (Optional)" name="phone"
+                                         value="{!v.accountDetailsModel.phone}" pattern="[0-9]{4,13}" messageWhenPatternMismatch  ="Phone number entered is invalid" onchange="{! c.handleAccountChange }"/>
+                    </aura:if>
+                </lightning:layoutItem>
+                
+            </lightning:layout>
+            
+            <lightning:layout class="slds-m-bottom--medium">
+                <lightning:layoutItem size="4">
+                    <div class="slds-text-body_small edit-field-label">NUCLEUS ID</div>
+                    <div class="slds-text-body_regular">{!v.accountDetailsModel.customerId}</div>
+                </lightning:layoutItem>
+                
+                <lightning:layoutItem size="4">
+                    <div class="slds-text-body_small edit-field-label">Join EA
+                        Since</div>
+                    <div class="slds-text-body_regular">
+                        <c:FormattedDateTime value="{!v.accountDetailsModel.dateCreated}" format="only-date"/>
+                    </div>
+                </lightning:layoutItem>
+                
+                <lightning:layoutItem size="4">
+                    <aura:if isTrue="{!v.isOpen}">
+                        <div class="slds-text-body_small edit-field-label">Customer
+                            Value (Optional)</div>
+                        <div class="slds-text-body_regular lower-case">{!v.accountDetailsModel.userValue}</div>
+                    </aura:if>
+                    <aura:if isTrue="{!v.isEdit}">
+                        <lightning:combobox class="slds-size_11-of-12" aura:id="accountform" name="customerValue"
+                                            label="Customer Value (Optional)" value="{!v.accountDetailsModel.userValue}" placeholder=""
+                                            options="{!v.customerValue}" />
+                    </aura:if>
+                </lightning:layoutItem>
+            </lightning:layout>
+            
+            <lightning:layout class="slds-m-bottom--medium">
+				<!-- TSM-2887 -->
+				<lightning:layoutItem size="4">
+                    <div class="slds-text-body_small edit-field-label"> </div>                         
+                    <div class="slds-text-body_small edit-field-label">Account Type</div>
+                    <aura:if isTrue="{!v.accountDetailsModel.ageGroup == null}">
+                        <div class="slds-text-body_regular">N/A</div>
+                    </aura:if>    
+                    
+                    <aura:if isTrue="{!v.accountDetailsModel.ageGroup != null}">   
+                        <div class="slds-text-title_caps slds-text-body_regular">{!v.accountDetailsModel.ageGroup}</div>
+                    </aura:if> 
+                </lightning:layoutItem>
+                <!-- TSM-2887 -->
+                <lightning:layoutItem size="4">
+                    <!--<aura:if isTrue="{!v.accountDetailsModel.parentalEmail == null}">-->
+                    <!-- <aura:if isTrue="{!v.accountDetailsModel.relationsShips.length != 0}">-->
+                    <div class="slds-text-body_small edit-field-label">Linked Underage Account</div>                   
+                    <div class="slds-text-body_regular">
+                        <aura:if isTrue="{! empty(v.accountDetailsModel.relationsShips)}">
+                            <div class="slds-text-body_regular">N/A</div>
+                            <aura:set attribute="else">  
+                                <aura:iteration items="{!v.accountDetailsModel.relationsShips}" var="eachRelationShip" indexVar="idx">  
+                                    <aura:if isTrue="{!idx==1}">    
+                                        <div class="slds-text-body_small"><a onclick="{!c.callLinkedAccount}">{!eachRelationShip.email}</a></div>
+                                        <aura:set attribute="else">
+                                            <div class="slds-text-body_small"><a onclick="{!c.callLinkedAccount}">{!eachRelationShip.email}</a></div>
+                                        </aura:set>
+                                    </aura:if>                                     
+                                </aura:iteration>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                    <!--<aura:set attribute="else">
+                                <div class="slds-text-body_small edit-field-label"></div>
+                                <aura:if isTrue="{!v.isOpen}">
+                                    <div class="slds-text-body_small edit-field-label">Parental Account</div>
+                                    <aura:if isTrue="{!v.accountDetailsModel.parentalEmail == null}">
+                                        <div class="slds-text-body_regular">N/A</div>
+                                    </aura:if>   
+                                    
+                                    <aura:if isTrue="{!v.accountDetailsModel.parentalEmail != null}">   
+                                        <div class="slds-text-body_regular"><a onclick="{!c.callLinkedAccount}">{!v.accountDetailsModel.parentalEmail}</a></div>
+                                    </aura:if>     
+                                </aura:if>
+                                <aura:if isTrue="{!v.isEdit}">
+                                    <lightning:input class="slds-size_11-of-12" aura:id="accountform"
+                                                     label="Parental Account" name="parentalEmail"
+                                                     value="{!v.accountDetailsModel.parentalEmail}" onchange="{! c.handleAccountChange }" pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$" messageWhenPatternMismatch  ="You have entered an invalid format"/>
+                                </aura:if>
+                            </aura:set>-->
+                    <!--</aura:if>-->
+                    <!--<aura:set attribute="else">-->          
+                    <!--</aura:set>-->
+                    <!--</aura:if>-->
+                </lightning:layoutItem>
+                <lightning:layoutItem size="4">
+                      <div class="slds-text-body_small edit-field-label"></div>
+                            <aura:if isTrue="{!v.isOpen}">
+                                <div class="slds-text-body_small edit-field-label">Parental Account</div>
+                                <aura:if isTrue="{!v.accountDetailsModel.parentalEmail == null}">
+                                    <div class="slds-text-body_regular">N/A</div>
+                                </aura:if>    
+                                
+                                <aura:if isTrue="{!v.accountDetailsModel.parentalEmail != null}">   
+                                    <div class="slds-text-body_regular"><a onclick="{!c.callLinkedAccount}">{!v.accountDetailsModel.parentalEmail}</a></div>
+                                </aura:if>     
+                            </aura:if>
+                            <aura:if isTrue="{!v.isEdit}">
+                                <lightning:input class="slds-size_11-of-12" aura:id="accountform"
+                                                 label="Parental Account" name="parentalEmail"
+                                                 value="{!v.accountDetailsModel.parentalEmail}" onchange="{! c.handleAccountChange }" pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$" messageWhenPatternMismatch  ="You have entered an invalid format"/>
+                            </aura:if>
+                
+                </lightning:layoutItem>
+            </lightning:layout>
+
+            <lightning:layout class="slds-m-bottom--medium">
+                <lightning:layoutItem size="12">
+                    <a onclick="{!c.viewError}" data-originid="{!v.accountDetailsModel.persona}">View Origin Error Reports</a>
+                </lightning:layoutItem>
+            </lightning:layout>
+            <!-- TSM-2887 STARTS -->
+            <aura:if isTrue="{!v.accountDetailsModel.parentalEmail != null}">
+            	<c:FamilyControlInfo aura:id="familyControlCmp" nucleusId="{!v.accountDetailsModel.customerId}" />
+            </aura:if>
+            <!-- TSM-2887 ENDS -->
+            <aura:if isTrue="{!v.Spinner}">
+                <lightning:spinner aura:id="spinner" variant="brand" size="small" />
+            </aura:if>
+        </div>
+        
+        <div class="slds-border_top slds-m-bottom--large"></div>
+        <!-- Player Persona section -->
+		<div class="slds-grid slds-gutters">
+         <div style= "font-size: 1.0rem; font-weight: 700; line-height: 1.25;" class="slds-col slds-size_3-of-4 slds-m-bottom--medium">Player Personas</div>
+            <div class="slds-col slds-size_1-of-4">
+                <!--<lightning:buttonIcon iconName="utility:add" variant="neutral" onclick="{! c.handleClick }" alternativeText="Settings" />-->
+               <!-- <lightning:button label="Add New" onclick="{!c.handleClick}" />-->
+                <button class="slds-button slds-button_neutral" label="Add New" title="add" onclick="{!c.openAddPersonaModal}">
+                    <lightning:icon size="xx-small" iconName="utility:add" alternativeText="Utility image" />
+                    <span class="slds-assistive-text">Add New</span>
+                    Add New
+                </button>
+            </div>
+        </div><br/>
+		<!--modal to add new persona-->
+		<aura:if isTrue="{!v.newPersonaModal}">
+			 <div class="addPersona">
+        <c:ParentModal isModalOpen="{!v.newPersonaModal}">  
+            <aura:set attribute="class" value="slds-modal_small" />
+            <aura:set attribute="outerClass" value="modal-container" />
+            <aura:set attribute="content">
+                
+                <div class="slds-grid slds-grid_vertical">
+                    <div class="slds-col ">
+                        <span> <lightning:input type="text" aura:id="addPersona" value="{!v.personaName}" label="Persona Name" onchange="{!c.handleNewPersonaCheck}"/>
+                                                </span>
+                    </div>
+                    <div class="slds-col "><!--TODO ban category-->
+                        <span>  <lightning:combobox name="Namespace"  aura:id="addPersona" label="Namespace" value="" placeholder="Select Namespace" options="{! v.personaNamespace }"  onchange="{!c.setNameSpace}"/>
+                                               </span>
+                    </div>
+                </div>
+                
+                
+                
+            </aura:set>
+            <aura:set attribute="title">
+                <p>Add New Persona</p>
+            </aura:set>
+            <aura:set attribute="clickClose" value="false"/>
+            <aura:set attribute="escapeClose" value="false"/>
+             <aura:set attribute="showSpinner" value="{!v.openSpinner}"/>
+            <aura:set attribute="success" value="Add Persona"/>
+            <aura:set attribute="cancel" value="Cancel"/>
+            <aura:set attribute="onSuccess" value="{!c.addNewPersona}"/>
+            <aura:set attribute="onCancel" value="{!c.closeAddPersonaModal}"/>
+            <aura:set attribute="isSuccessDisable" value="{!v.addPersonaDisable}"/>
+        </c:ParentModal>
+		 </div>
+            </aura:if>
+		
+		
+        <c:DataGrid data="{!v.personaData}" gridName="personaGrid"
+        externalData="{!v.externalData}"            
+        pkField="personaId" aura:id="datagrid" type="expand">
+            <c:DataGridColumn fieldName="personaId" label="ID" class="" />
+            <c:DataGridColumn fieldName="displayName" label="DISPLAY NAME"
+                              class="" />
+            <c:DataGridColumn fieldName="namespaceName" label="NAMESPACE" class="" />
+            <c:DataGridColumn fieldName="status" label="STATUS" class="" />
+            <c:DataGridColumn fieldName="name" label="hidden" class="" />
+            <c:DataGridColumn fieldName="dateCreated" label="hidden" class="" />
+            <c:DataGridColumn fieldName="lastAuthenticated" label="hidden"
+                              class="" />
+        </c:DataGrid>
+        
+        <div class="slds-m-bottom_x-large"></div>
+        
+        <!-- Social and Additional Settings -->
+        <div style="cursor: pointer;" onclick="{!c.toggleAccordian}">
+            <section class="slds-clearfix">
+                <div class="slds-float--left ">
+                    <lightning:buttonIcon class="slds-show" aura:id="socialAccordian"
+                                          iconName="utility:chevronright" variant="bare"
+                                          alternativeText="Indicates add" />
+                    <lightning:buttonIcon class="slds-hide" aura:id="socialAccordian"
+                                          iconName="utility:chevrondown" variant="bare"
+                                          alternativeText="Indicates dash" />
+                </div>
+                <div class="text-bold slds-m-left--large">Social
+                    and Additional Settings</div>
+            </section>
+        </div>
+        
+        <div class="slds-hide slds-p-around--medium" aura:id="socialAccordian">
+            <!--
+            <lightning:layout>
+                <lightning:layoutItem size="4" padding="around-small">
+                    <div class="slds-text-body_small edit-field-label">Facebook</div>
+                    <aura:if isTrue="{!v.accountDetailsModel.facebookId != null}">               
+                        <div class="slds-text-body_regular">{!v.accountDetailsModel.facebookId}</div>
+                        <aura:set attribute="else">
+                            <div class="slds-text-body_regular">N/A</div>
+                        </aura:set>
+                    </aura:if>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="4" padding="around-small">
+                    <div class="slds-text-body_small edit-field-label">Twitter</div>
+                    <div class="slds-text-body_regular">N/A</div>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="4" padding="around-small">
+                    <div class="slds-text-body_small edit-field-label">BESL ID</div>
+                    <aura:if isTrue="{!v.accountDetailsModel.beslId  != null}">               
+                        <div class="slds-text-body_regular">{!v.accountDetailsModel.beslId}</div>
+                        <aura:set attribute="else">
+                            <div class="slds-text-body_regular">N/A</div>
+                        </aura:set>
+                    </aura:if>
+                </lightning:layoutItem>
+            </lightning:layout>            
+            <lightning:layout>
+                <lightning:layoutItem size="4" padding="around-small">
+                    <div class="slds-text-body_small edit-field-label">Twitch</div>
+                    <div class="slds-text-body_regular">N/A</div>
+                </lightning:layoutItem>
+            </lightning:layout>
+            -->
+            
+            <c:SocialAccounts strAccountId="{!v.accountId}" nucleusId="{!v.nucleusId}" caseId="{!v.caseId}" />
+            
+            <div class="slds-text-title_bold slds-p-top_medium">Marketing Settings</div>
+                        
+            <lightning:layout>
+                <lightning:layoutItem size="4" padding="around-small">
+                    <div class="slds-text-body_small edit-field-label">Opted in (Global)</div>
+                    <lightning:input aura:id="optInGlobalToggle" type="toggle" label=""
+                                     value="optInGlobal" name="optedInGlobal"
+                                     onchange="{!c.toggleSocialEvent}" checked="false" />
+                    <div class="slds-m-bottom_medium"></div>
+                    <section aura:id="optInGlobal"
+                             class="slds-popover slds-nubbin_top-left slds-hide" role="dialog"
+                             aria-label="Dialog Title" aria-describedby="dialog-body-id-5">
+                        <div class="slds-popover__body">
+                            <aura:if isTrue="{!v.optInGlobal}">
+                                <div class="text-bold">Are you sure you want to opt out for
+                                    marketing emails?</div>
+                                <aura:set attribute="else">
+                                    <div class="text-bold">Are you sure you want to opt in for
+                                        marketing emails?</div>
+                                </aura:set>
+                            </aura:if>
+                            <div class="slds-m-bottom_medium"></div>
+                            <lightning:button onclick="{!c.toggleSocialEvent}"
+                                              value="optInGlobal" variant="brand" label="Cancel" />
+                            <aura:if isTrue="{!v.optInGlobal}">
+                                <lightning:button onclick="{!c.toggleAction}"
+                                                  value="optInGlobalToggle" variant="brand" label="Opt out" />
+                                <aura:set attribute="else">
+                                    <lightning:button onclick="{!c.toggleAction}"
+                                                      value="optInGlobalToggle" variant="brand" label="Opt in" />
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                    </section>
+                </lightning:layoutItem>
+                
+                <lightning:layoutItem size="4" padding="around-small">
+                    <div class="slds-text-body_small edit-field-label">Opted in (Third party)</div>
+                    <lightning:input aura:id="optInThirdPartyToggle" type="toggle"
+                                     label="" value="optInThirdParty" onchange="{!c.toggleSocialEvent}"
+                                     name="optedInThirdparty" checked="false" />
+                    <div class="slds-m-bottom_medium"></div>
+                    <section aura:id="optInThirdParty"
+                             class="slds-popover slds-nubbin_top-left slds-hide" role="dialog"
+                             aria-label="Dialog Title" aria-describedby="dialog-body-id-5">
+                        <div class="slds-popover__body">
+                            <aura:if isTrue="{!v.optInThirdParty}">
+                                <div class="text-bold">Are you sure you want to opt out for
+                                    marketing emails?</div>
+                                <aura:set attribute="else">
+                                    <div class="text-bold">Are you sure you want to opt in for
+                                        marketing emails?</div>
+                                </aura:set>
+                            </aura:if>
+                            <div class="slds-m-bottom_medium"></div>                           
+                            <lightning:button onclick="{!c.toggleSocialEvent}"
+                                              value="optInThirdParty" variant="brand" label="Cancel" />
+                            <aura:if isTrue="{!v.optInThirdParty}">
+                                <lightning:button onclick="{!c.toggleAction}"
+                                                  value="optInThirdPartyToggle" variant="brand" label="Opt out" />
+                                <aura:set attribute="else">
+                                    <lightning:button onclick="{!c.toggleAction}"
+                                                      value="optInThirdPartyToggle" variant="brand" label="Opt in" />
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                    </section>
+                    
+                </lightning:layoutItem>
+                <lightning:layoutItem size="4" padding="around-small">
+                    <div>
+                       <!-- tsm 3309 <div class="slds-text-body_small edit-field-label">Player data processing</div>
+                        <lightning:input aura:id="processingDataToggle" type="toggle"
+                                         label="" value="processingData" onchange="{!c.toggleProcessing}"
+                                         name="playerDataProcessing" checked="false" disabled="{! not(v.accountMaskingList.EditGDPRSettings)}"/> tsm 3309 -->
+                        <div class="slds-m-bottom_medium"></div>
+                        <section aura:id="processingData"
+                                 class="slds-popover slds-nubbin_top slds-hide setting-left-alignment" role="dialog"
+                                 aria-label="Dialog Title" aria-describedby="dialog-body-id-5">
+                            <div class="slds-popover__body">
+                                <div class="text-bold">Are you sure you want to stop
+                                    processing the player's data?</div>
+                                <div class="slds-m-bottom_medium"></div>
+                                <p>Once it is stopped, you woun't be able to revoke it.</p>
+                                <div class="slds-m-bottom_medium"></div>
+                                <label class="slds-form-element__label">Reason</label>
+                                <textarea class="slds-textarea" placeholder=""></textarea>
+                                <lightning:button onclick="{!c.stopProcessing}"
+                                                  value="processingData" variant="brand" label="Cancel" />
+                                <lightning:button variant="brand" onclick="{!c.stopProcessing}"
+                                                  value="processingDataToggle" label="Stop Processing" />
+                            </div>
+                        </section>
+                    </div>
+                </lightning:layoutItem>
+            </lightning:layout>
+			<!-- TSM-3023 STARTS -->
+            <div class="game-status">
+                <c:GameStatusAll caseId="{!v.caseId}" accountId="{!v.accountId}" nucleusId="{!v.accountDetailsModel.customerId}" accountMaskingList="{!v.accountMaskingList}" />
+            </div>
+            <!-- TSM-3023 ENDS -->
+            <aura:if isTrue="{!v.socialSpinner}">
+                <lightning:spinner aura:id="spinner" variant="brand" size="small" />
+            </aura:if>
+        </div>
+        
+    </div>
+    
+    <!-- Adding the front end to Reset password but the component backend will be deployed as part of later sprint -->    
+    <aura:if isTrue="{!v.isResetPasswordOpen}">
+        <c:ParentModal isModalOpen="{!v.isResetPasswordOpen}">
+            <aura:set attribute="class" value=" " />
+            <aura:set attribute="outerClass" value="modal-container" />
+            <aura:set attribute="title" value="Reset Password" />
+            <aura:set attribute="content">
+                <lightning:layout class="slds-m-top_x-small slds-m-bottom_large">
+                    <div> Confirm to send Rest Password email to the primary email of the player. Once they receive this email, they will need to click the link and follow the reset password flow.</div>
+                </lightning:layout>
+                
+                <lightning:layout class="slds-m-bottom_x-small">
+                    <lightning:layoutItem class="slds-text-body_small" size="3">
+                        <div class="slds-text-body_small slds-m-left_large">Primary Email</div>
+                    </lightning:layoutItem>
+                    <!--<lightning:layoutItem class="slds-text-body_small" size="4">
+                        <div class="slds-text-body_small blue-text">Recommended</div>
+                    </lightning:layoutItem> -->
+                </lightning:layout>
+                
+                <lightning:layout class="slds-m-bottom_large">
+                    <lightning:input type="radio" class="text-small-bold" label="{!v.accountDetailsModel.email}" name="primaryEmail" value="{!v.accountDetailsModel.email}" onchange="{!c.handleResetPasswordRadio}" checked="true" />
+                </lightning:layout> 
+                <aura:if isTrue="{!v.accountDetailsModel.secondaryEmail != null}"> 
+                    <lightning:layout class="slds-m-bottom_x-small">    
+                        <lightning:layoutItem class="slds-text-body_small" size="3">
+                            <div class="slds-text-body_small slds-m-left_large">Secondary Email</div>
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                    <lightning:layout class="slds-m-bottom_large">
+                        <lightning:input type="radio" label="{!v.accountDetailsModel.secondaryEmail}" name="secondaryEmail" onchange="{!c.handleResetPasswordRadio}" value="{!v.accountDetailsModel.secondaryEmail}" />
+                    </lightning:layout>
+                </aura:if> 
+            </aura:set>
+            <aura:set attribute="showSpinner" value="{!v.isLoading}"/>
+            <aura:set attribute="isDirectionalFooter" value="false"/>
+            <aura:set attribute="success" value="Send"/>
+            <aura:set attribute="cancel" value="Cancel"/>
+            <aura:set attribute="onSuccess" value="{!c.sendResetPasswordEmail}"/>
+            <aura:set attribute="onCancel" value="{!c.closeResetPassword}"/>
+            <!--<aura:set attribute="onClose" value="{!c.handleCloseClick}"/>-->
+        </c:ParentModal>
+    </aura:if>
+    
+    <!-- Add/Update Secondary Email part of ticket TSM-1936 -->
+    <aura:if isTrue="{!v.isEmailVerificationOpen}"> 
+        <c:ParentModal isModalOpen="{!v.isEmailVerificationOpen}">            
+            <aura:set attribute="content">
+                <p>A validation email has been sent, the player will need to read over the code.</p>
+                
+                <lightning:input onchange="{!c.keyCheck}" aura:id="verCodeS" name="input1" label="Verification Code" class="{!v.isCodeError? 'slds-has-error' :''}"/>
+                
+                <aura:if isTrue="{!v.isCodeError}">
+                    <p>*Wrong Code</p>
+                </aura:if>
+            </aura:set>
+            <aura:set attribute="title">
+                <p>Validate New Secondary Email</p>
+            </aura:set>
+            <aura:set attribute="clickClose" value="false"/>
+            <aura:set attribute="escapeClose" value="false"/>
+            <aura:set attribute="success" value="Confirm Code &amp; Update"/>
+            <aura:set attribute="cancel" value="Cancel"/>
+            <aura:set attribute="onSuccess" value="{!c.updateSecondaryEmailData}"/>
+            <aura:set attribute="onCancel" value="{!c.closeEmailVerification}"/>
+            <aura:set attribute="isSuccessDisable" value="{!v.isSuccessDisable}"/>
+        </c:ParentModal>
+    </aura:if>
+
+    
+    <!-- Adding the front end to set temporary password bas part of ticket TSM-1318 --> 
+    <aura:if isTrue="{!v.isSetTemporaryPasswordOpen}">  
+        <div>
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-02" aria-modal="true" aria-describedby="modal-content-id-2" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                            <lightning:icon class="close-icon" iconName="utility:close" size="small" onclick="{!c.closeTemporaryPassword}" alternativeText="Approved" />
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">Set Temporary Password</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                        <lightning:layout class="slds-m-top_x-small slds-m-bottom_large">
+                            <div>Create a temporary password for the associated player account. This will expire in the standard time for process for temporary passwords.</div>
+                        </lightning:layout>                 
+                        
+                        <lightning:layout class="slds-m-bottom_large">
+                            <lightning:layoutItem size="12"> 
+                                <lightning:input aura:id="temporaryPassword" label="Temporary Password (Include 8-16 characters, at least one upper case letter, one lower case and a numeric)" name="temporaryPassword" value="" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,16}$" messageWhenPatternMismatch  ="Invalid password format" onchange="{!c.toggleTempPasswordSubmit}"/>
+                            </lightning:layoutItem>    
+                        </lightning:layout>    
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning:button aura:id="cancelButton" label="Cancel" onclick="{!c.closeTemporaryPassword}" />
+                        <lightning:button aura:id="temporaryPasswordSubmitButton" variant="brand" label="Submit" onclick="{!c.setTemporaryPasswordForUser}" disabled="true"/> 
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>        
+    </aura:if>
+    
+	<!--tsm 1911 -->
+	<!--tsm1911-->
+    <aura:if isTrue="{!v.openUnderAgeModal}"> 
+        <c:ParentModal isModalOpen="{!v.openUnderAgeModal}"> 
+            <aura:set attribute="class" value="slds-modal_small" />
+            <aura:set attribute="outerClass" value="modal-container" />
+            <aura:set attribute="content">
+                <p>Are you sure you want to change this account to an underage account?</p>
+                
+                
+            </aura:set>
+            <aura:set attribute="title">
+                <p>Change to Underage Account</p>
+            </aura:set>
+            <aura:set attribute="clickClose" value="false"/>
+            <aura:set attribute="escapeClose" value="false"/>
+            <aura:set attribute="success" value="Change"/>
+            <aura:set attribute="showSpinner" value="{!v.openSpinner}"/>
+            <aura:set attribute="cancel" value="Cancel"/>
+            <aura:set attribute="onSuccess" value="{!c.updateParentEmail}"/>
+            <aura:set attribute="onCancel" value="{!c.closeUnderageModal}"/>
+            <!--<aura:set attribute="isSuccessDisable" value="{!v.isSuccessDisable}"/>-->
+        </c:ParentModal>
+    </aura:if>
+</aura:component>

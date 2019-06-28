@@ -1,0 +1,79 @@
+.THIS .accountGroupButtons {
+    float:right;
+}
+.THIS .popoverButtons {
+    float:right;
+    margin-bottom:1em !important;
+    margin-top:1em !important;
+}
+.THIS .slds-checkbox_on{
+    display:none !important;
+}
+.THIS .slds-checkbox_off{
+    display:none !important;
+}
+.THIS .slds-spinner_container {
+    z-index: 0;
+}
+.THIS .c-layoutBackground{
+    background-color:#FAFAF9;
+}
+.THIS .c-heading{
+    font-weight:bold;
+    font-size:16px !important;
+    line-height:25px;
+}
+.THIS .edit-field-label {
+    color: #706e6b;
+}
+.THIS .text-bold{
+    font-size: 1.0rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+.THIS .link-account{
+    color: #005fb2;
+}
+.THIS .lower-case{
+    text-transform: lowercase;
+}
+.THIS .margin-right-custom{
+    margin-right:0.5rem;
+}
+.THIS .close-icon lightning-primitive-icon svg{
+    fill:#FFFFFF;
+}
+.THIS .float-right{
+    float:right;
+}
+.THIS .text-small-bold{
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.25;
+}
+.THIS .blue-text{
+    color:blue;
+}
+.THIS label.slds-form-element__label.slds-no-flex{
+    color: #706e6b;
+}
+.THIS .wrap-text{
+    word-wrap: break-word;
+    white-space: normal;    
+}
+.THIS .setting-left-alignment{
+    right: 8.5rem;
+}
+
+.THIS .addPersona .slds-backdrop {
+    width: 100% !important;
+    margin-left: 0 !important;
+    z-index: 999;
+}
+
+.THIS .addPersona .slds-modal__container {
+    left: 0;
+}
+.THIS .slds-modal__content{
+   overflow: initial;
+}
