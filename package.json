@@ -2,8 +2,8 @@
   "name": "mocha-aura",
   "description": "Test Salesforce Aura Lightning components with mocha",
   "author": {
-    "name": "Yuriy Sannikov",
-    "email": "yury.sannikov@gmail.com"
+    "name": "Deepak Tiwari",
+    "email": "er.deepak.cs03@gmail.com"
   },
   "version": "1.0.3",
   "main": "dist/index.js",
