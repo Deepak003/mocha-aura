@@ -1,6 +1,7 @@
 # mocha-aura
 
-Test your Salesforce Lightning components with mocha
+Test your Salesforce Lightning components with mocha.
+https://www.linkedin.com/pulse/testing-lightning-components-outside-salesforce-yuriy-sannikov
 
 ## Why?
 Salesforce Aura components controller and helper files does not export anything and can not be directly required by nodejs. `mocha-aura` modifies standard nodejs loader for Salesforce Aura components and exports containing object.
