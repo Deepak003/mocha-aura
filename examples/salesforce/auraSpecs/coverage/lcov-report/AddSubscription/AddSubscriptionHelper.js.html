@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for AddSubscription/AddSubscriptionHelper.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">AddSubscription/</a> AddSubscriptionHelper.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>0/113</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/36</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>0/9</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">0% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>0/113</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line low'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190</td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >		({</span>
+    doInitHelper : <span class="fstat-no" title="function not covered" >function(component, event, helper) {</span>
+<span class="cstat-no" title="statement not covered" >        var billingAccounts = component.get('v.billingAccList');</span>
+<span class="cstat-no" title="statement not covered" >        var result =[];</span>
+<span class="cstat-no" title="statement not covered" >        for(let i=0; i &lt; billingAccounts.length; i++){</span>
+<span class="cstat-no" title="statement not covered" >            var resArr={};</span>
+<span class="cstat-no" title="statement not covered" >            var cardNo = billingAccounts[i].accountNumber.substr(billingAccounts[i].accountNumber.length - 4 , </span>
+                                                                 billingAccounts[i].accountNumber.length);
+<span class="cstat-no" title="statement not covered" >            if(billingAccounts[i].cardNumber != '' ){</span>
+<span class="cstat-no" title="statement not covered" >                if(billingAccounts[i].billingAccountType != 'paypal' &amp;&amp; billingAccounts[i].billingAccountType != 'EACashWallet'){</span>
+<span class="cstat-no" title="statement not covered" >                    resArr['label'] =  billingAccounts[i].type + ' ('+ cardNo +') '</span>
+                    + 'Exp '+ billingAccounts[i].expirationMonth +'/'+billingAccounts[i].expirationYear;
+                }
+               /* else if(billingAccounts[i].billingAccountType == 'EACashWallet'){
+                    resArr['label'] =  billingAccounts[i].type  + ' Bal $'+billingAccounts[i].balance; 
+                }*/
+                    else{
+<span class="cstat-no" title="statement not covered" >                        resArr['label'] =  billingAccounts[i].type; </span>
+                    }
+<span class="cstat-no" title="statement not covered" >                resArr['value'] = billingAccounts[i].id;</span>
+<span class="cstat-no" title="statement not covered" >                resArr['type'] = billingAccounts[i].billingAccountType;</span>
+<span class="cstat-no" title="statement not covered" >                resArr['cardNumber'] = billingAccounts[i].cardNumber;</span>
+<span class="cstat-no" title="statement not covered" >                result.push(resArr);</span>
+            }
+            
+            /*if(billingAccounts[i].cardNumber != '' ){
+                resArr['label'] =  billingAccounts[i].type + ' ('+ cardNo +') '
+                  + 'Exp '+ billingAccounts[i].expirationMonth +'/'+billingAccounts[i].expirationYear;
+                resArr['value'] = billingAccounts[i].id;
+                result.push(resArr);
+            }*/
+        }
+<span class="cstat-no" title="statement not covered" >        component.set('v.billingAccount', result);</span>
+    },
+    fetchOriginSubscriptionTypesHelper: <span class="fstat-no" title="function not covered" >function(component, event, helper) {</span>
+<span class="cstat-no" title="statement not covered" >        var action = component.get("c.fetchOriginSubscriptionTypes"); </span>
+<span class="cstat-no" title="statement not covered" >        action.setCallback(this, <span class="fstat-no" title="function not covered" >function(response) {</span></span>
+<span class="cstat-no" title="statement not covered" >            var state = response.getState();</span>
+<span class="cstat-no" title="statement not covered" >            var storeResponse = response.getReturnValue();</span>
+<span class="cstat-no" title="statement not covered" >            if (state === "SUCCESS") {</span>
+<span class="cstat-no" title="statement not covered" >                var result =[];</span>
+<span class="cstat-no" title="statement not covered" >                for(let i=0; i &lt; storeResponse.length; i++){</span>
+<span class="cstat-no" title="statement not covered" >                    var resArr={};</span>
+<span class="cstat-no" title="statement not covered" >                    resArr['label'] =  storeResponse[i].Name;</span>
+<span class="cstat-no" title="statement not covered" >                    resArr['value'] = storeResponse[i].Catalog_Offer_ID__c;</span>
+<span class="cstat-no" title="statement not covered" >                    result.push(resArr);</span>
+                }
+<span class="cstat-no" title="statement not covered" >                component.set("v.membership", result);</span>
+            }
+        });
+<span class="cstat-no" title="statement not covered" >        $A.enqueueAction(action);</span>
+    },
+    fetchCost: <span class="fstat-no" title="function not covered" >function(component, event, helper){</span>
+<span class="cstat-no" title="statement not covered" >        var action = component.get("c.fetchCostOfNewSubscription");</span>
+<span class="cstat-no" title="statement not covered" >        action.setParams({</span>
+            newOfferId: component.find("memberActions").get("v.value"),
+            billingAccountId: component.find("billingActions").get("v.value")
+        });
+<span class="cstat-no" title="statement not covered" >        action.setCallback(this, <span class="fstat-no" title="function not covered" >function(response) {</span></span>
+<span class="cstat-no" title="statement not covered" >            var state = response.getState();</span>
+<span class="cstat-no" title="statement not covered" >            var storeResponse = response.getReturnValue();</span>
+<span class="cstat-no" title="statement not covered" >            if (state === "SUCCESS") {</span>
+                // component.set("v.membershipCost" , storeResponse);
+<span class="cstat-no" title="statement not covered" >                var strToBeAppended = '/Month*';</span>
+<span class="cstat-no" title="statement not covered" >                var membershipCost = storeResponse;</span>
+<span class="cstat-no" title="statement not covered" >                var formattedMembershipCost = membershipCost+strToBeAppended</span>
+<span class="cstat-no" title="statement not covered" >                component.set("v.membershipCost" , formattedMembershipCost);</span>
+            }
+        });
+<span class="cstat-no" title="statement not covered" >        $A.enqueueAction(action);</span>
+    },
+    helperonConfirm: <span class="fstat-no" title="function not covered" >function(component, event, helper) {</span>
+<span class="cstat-no" title="statement not covered" >        var getRequestMap = {};</span>
+<span class="cstat-no" title="statement not covered" >        getRequestMap["offerId"] = component.get("v.memberActionVal");</span>
+<span class="cstat-no" title="statement not covered" >        getRequestMap["offerName"] = component.get("v.memberActionLabel");</span>
+<span class="cstat-no" title="statement not covered" >        getRequestMap["customerId"] = component.get("v.nucleusId");</span>
+<span class="cstat-no" title="statement not covered" >        getRequestMap["billingAccountId"] = component.get("v.billingActionVal");</span>
+<span class="cstat-no" title="statement not covered" >        getRequestMap["paymentAgreementId"] = component.get("v.paymentAgreementId"); </span>   //if billing account is Paypal 
+<span class="cstat-no" title="statement not covered" >        getRequestMap["billingAccountType"] = component.get("v.cardType"); </span>     //creditCard, Cash card
+<span class="cstat-no" title="statement not covered" >		getRequestMap["caseId"] = component.get("v.caseId");</span>
+<span class="cstat-no" title="statement not covered" >		getRequestMap["isCreateCRMEvent"] = 'TRUE';</span>
+<span class="cstat-no" title="statement not covered" >        getRequestMap["newMembershipPrice"] = component.get("v.membershipCost");</span>
+<span class="cstat-no" title="statement not covered" >        getRequestMap["accountId"] = component.get('v.accountId');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        var action = component.get("c.purchaseNewOriginSubsription");</span>
+<span class="cstat-no" title="statement not covered" >         action.setParams({ </span>
+             mapRequestParams : getRequestMap
+        });
+<span class="cstat-no" title="statement not covered" >        action.setCallback(this, <span class="fstat-no" title="function not covered" >function(response) {</span></span>
+<span class="cstat-no" title="statement not covered" >            var state = response.getState();</span>
+<span class="cstat-no" title="statement not covered" >            var storeResponse = response.getReturnValue();</span>
+<span class="cstat-no" title="statement not covered" >            if (state === "SUCCESS") {</span>
+<span class="cstat-no" title="statement not covered" >                var appCloseEvent = $A.get("e.c:AddSubscriptionEvent");</span>
+<span class="cstat-no" title="statement not covered" >                var appEvent = $A.get("e.c:RefreshSubscription");</span>
+<span class="cstat-no" title="statement not covered" >                var toastEvent = $A.get("e.force:showToast");</span>
+<span class="cstat-no" title="statement not covered" >                toastEvent.setParams({</span>
+                    type: 'success',
+                    message: storeResponse
+                });
+<span class="cstat-no" title="statement not covered" >                toastEvent.fire();</span>
+<span class="cstat-no" title="statement not covered" >                appEvent.fire();</span>
+<span class="cstat-no" title="statement not covered" >                appCloseEvent.fire();</span>
+            }
+            else{
+<span class="cstat-no" title="statement not covered" >                var appCloseEvent = $A.get("e.c:AddSubscriptionEvent");</span>
+<span class="cstat-no" title="statement not covered" >                var appEvent = $A.get("e.c:RefreshSubscription");</span>
+<span class="cstat-no" title="statement not covered" >                var toastEvent = $A.get("e.force:showToast");</span>
+<span class="cstat-no" title="statement not covered" >                toastEvent.setParams({</span>
+                    type: 'error',
+                    message: storeResponse
+                });
+<span class="cstat-no" title="statement not covered" >                toastEvent.fire();</span>
+<span class="cstat-no" title="statement not covered" >                appEvent.fire();</span>
+<span class="cstat-no" title="statement not covered" >                appCloseEvent.fire();</span>
+            }
+        });
+<span class="cstat-no" title="statement not covered" >        $A.enqueueAction(action);</span>
+    },
+    onChangeActionHelper : <span class="fstat-no" title="function not covered" >function(component, event, helper){</span>
+<span class="cstat-no" title="statement not covered" >        if ( component.find("memberActions").get("v.value") != null ) {</span>
+<span class="cstat-no" title="statement not covered" >            var billingAccountId = '';            </span>
+<span class="cstat-no" title="statement not covered" >            var billingAccounts = component.get('v.billingAccList');</span>
+<span class="cstat-no" title="statement not covered" >            console.log(billingAccounts);</span>
+<span class="cstat-no" title="statement not covered" >            var result =[];</span>
+<span class="cstat-no" title="statement not covered" >            console.log(billingAccounts.length);</span>
+            
+<span class="cstat-no" title="statement not covered" >            for ( let i=0; i &lt; billingAccounts.length; i++ ) {</span>
+<span class="cstat-no" title="statement not covered" >                if ( billingAccounts[i].billingAccountType == 'EACashWallet' ) {</span>
+<span class="cstat-no" title="statement not covered" >                   billingAccountId = billingAccounts[i].id;</span>
+                }
+            }
+            
+<span class="cstat-no" title="statement not covered" >            if ( billingAccountId != '' ) {</span>
+<span class="cstat-no" title="statement not covered" >                var action = component.get("c.fetchCostOfNewSubscription");</span>
+<span class="cstat-no" title="statement not covered" >                console.log(component.find("memberActions").get("v.value"));</span>
+                
+<span class="cstat-no" title="statement not covered" >                action.setParams({</span>
+                    newOfferId: component.find("memberActions").get("v.value"),
+                    billingAccountId: billingAccountId
+                });
+<span class="cstat-no" title="statement not covered" >                action.setCallback(this, <span class="fstat-no" title="function not covered" >function(response) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    var state = response.getState();</span>
+<span class="cstat-no" title="statement not covered" >                    var storeResponse = response.getReturnValue();</span>
+<span class="cstat-no" title="statement not covered" >                    console.log(storeResponse); </span>
+<span class="cstat-no" title="statement not covered" >                    if (state === "SUCCESS") {</span>
+<span class="cstat-no" title="statement not covered" >                        console.log(storeResponse);</span>
+<span class="cstat-no" title="statement not covered" >                        component.set("v.membershipCost" , storeResponse);                        </span>
+<span class="cstat-no" title="statement not covered" >                        var membershipCost = storeResponse;</span>
+                        
+<span class="cstat-no" title="statement not covered" >                        for ( let i=0; i &lt; billingAccounts.length; i++ ) {</span>
+<span class="cstat-no" title="statement not covered" >                            var resArr={};</span>
+<span class="cstat-no" title="statement not covered" >                            var cardNo = billingAccounts[i].accountNumber.substr(billingAccounts[i].accountNumber.length - 4 , </span>
+                                                                                 billingAccounts[i].accountNumber.length);
+<span class="cstat-no" title="statement not covered" >                            if(billingAccounts[i].cardNumber != '' ){</span>
+<span class="cstat-no" title="statement not covered" >                                if(billingAccounts[i].billingAccountType != 'paypal' &amp;&amp; billingAccounts[i].billingAccountType != 'EACashWallet'){</span>
+<span class="cstat-no" title="statement not covered" >                                    resArr['label'] =  billingAccounts[i].type + ' ('+ cardNo +') '</span>
+                                    + 'Exp '+ billingAccounts[i].expirationMonth +'/'+billingAccounts[i].expirationYear;
+                                } else <span class="cstat-no" title="statement not covered" >if(billingAccounts[i].billingAccountType == 'EACashWallet' &amp;&amp; </span>
+                                          membershipCost != undefined &amp;&amp; 
+                                          billingAccounts[i].balance &lt; membershipCost.substr(0, membershipCost.length - 3)){
+<span class="cstat-no" title="statement not covered" >                                    resArr['label'] =  billingAccounts[i].type  + '(Insufficient funds)';                            </span>
+<span class="cstat-no" title="statement not covered" >                                    component.set('v.disableEACashWallet', true);</span>
+                                } else{
+<span class="cstat-no" title="statement not covered" >                                        resArr['label'] =  billingAccounts[i].type; </span>
+                                    }
+<span class="cstat-no" title="statement not covered" >                                resArr['value'] = billingAccounts[i].id;</span>
+<span class="cstat-no" title="statement not covered" >                                resArr['type'] = billingAccounts[i].billingAccountType;</span>
+<span class="cstat-no" title="statement not covered" >                                resArr['cardNumber'] = billingAccounts[i].cardNumber;</span>
+<span class="cstat-no" title="statement not covered" >                                result.push(resArr);</span>
+                            }
+                        }            
+                        
+<span class="cstat-no" title="statement not covered" >                        console.log(result);</span>
+<span class="cstat-no" title="statement not covered" >                        component.set('v.billingAccount', result);</span>
+                    }
+                });
+<span class="cstat-no" title="statement not covered" >                $A.enqueueAction(action);           </span>
+                
+            }
+        }
+<span class="cstat-no" title="statement not covered" >         console.log('onChangeActionHelper billing action ::: '+ component.find("billingActions").get("v.value"));</span>
+<span class="cstat-no" title="statement not covered" >        if(component.find("memberActions").get("v.value")!=null &amp;&amp; component.find("billingActions").get("v.value")!=null </span>
+           &amp;&amp; component.find("billingActions").get("v.value")!=''){
+<span class="cstat-no" title="statement not covered" >            component.set('v.enableNextButton',false);</span>
+        }
+        else{
+<span class="cstat-no" title="statement not covered" >            component.set('v.enableNextButton',true);</span>
+        }
+    }
+})</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Jul 04 2019 13:50:07 GMT+0530 (India Standard Time)
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="SubscriptionsAuraCtl">
+    <aura:attribute name="isFirstPage" type="Boolean" default="true"/>
+    <aura:attribute name="membership" type="List" default=""/>
+    <aura:attribute name="billingAccount" type="List" default=""/>
+    <aura:attribute name="nucleusId" type="String"/>
+    <aura:attribute name="preferredBilling" type="String"/>
+    <aura:attribute name="enableNextButton" type="boolean" default="true"/>
+    <aura:attribute name="billingAccList" type="List"/>
+    <aura:attribute name="memberActionVal" type="String"/>
+    <aura:attribute name="billingActionVal" type="String"/>
+    <aura:attribute name="today" type="Date"/>
+    <aura:attribute name="billingAccLabel" type="String"/>
+    <aura:attribute name="cardType" type="String"/>
+    <aura:attribute name="memberActionLabel" type="String"/>
+    <aura:attribute name="paymentAgreementId" type="String"/>
+    <aura:attribute name="membershipCost" type="String"/>
+    <aura:attribute name="isDisabled" type="boolean" default="false"/>
+    <aura:attribute name="disableEACashWallet" type="boolean" default="false"/>
+    <aura:registerEvent name="refreshParent" type="c:RefreshSubscription"/>
+    <aura:registerEvent name="closeModal" type="c:AddSubscriptionEvent"/>
+	<aura:attribute name="caseId" type="Id"/>
+	<aura:attribute name="accountId" type="String"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container" >
+                <aura:if isTrue="{!v.isFirstPage}">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                            <lightning:icon class="close-icon" iconName="utility:close" size="small" onclick="{!c.closeModal}"/>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h1 id="modal-heading-01" style="font-weight:normal;" class="slds-text-heading_medium slds-hyphenate">Add Subscription</h1>
+                    </header>
+                    
+                    <div class="modalBody slds-modal__content slds-p-top_large slds-p-right_x-large slds-p-left_x-large setting-height">
+                        <div><lightning:combobox aura:id="memberActions" name="general" placeholder="Select"  label="Select New Membership" options="{!v.membership}" onchange="{!c.onChangeAction}"/></div> 
+                        <div class="slds-m-top_medium">
+                            <!-- <lightning:combobox aura:id="billingActions" name="general" placeholder="Select"  label="Select Billing Account" options="{!v.billingAccount}" onchange="{!c.onChangeAction}"/>
+                            -->
+                            <lightning:select name="general" label="Select Billing Account" aura:id="billingActions" onchange="{!c.onChangeAction}">
+                                <option value="">Select</option>
+                                <aura:iteration items="{!v.billingAccount}" var="option">
+                                   <option text="{!option.label}" value="{!option.value}" disabled="{! option.type == 'EACashWallet' &amp;&amp; v.disableEACashWallet }"/>
+                                </aura:iteration>
+                            </lightning:select>
+                        </div>
+                    </div>
+                    <footer class="slds-modal__footer slds-p-top_large">
+                        <lightning:button aura:id="cancelButton" label="Cancel" onclick="{!c.closeModal}"/>
+                        <lightning:button aura:id="nextButton" variant="brand" label="Next" onclick="{!c.navigateForward}"  disabled="{!v.enableNextButton}"/>
+                    </footer>
+                    
+                    <aura:set attribute="else">
+                        <header class="slds-modal__header">
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                                <lightning:icon class="close-icon" iconName="utility:close" size="small" onclick="{!c.closeModal}"/>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h1 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Confirm New Subscription</h1>
+                        </header>
+                        <div class="modalBody slds-modal__content slds-p-top_large slds-p-right_x-large slds-p-left_x-large setting-height">
+                            You are enrolling <b>customer</b> in a <b>{!v.memberActionLabel}</b>
+                            <dl class="slds-list_horizontal slds-wrap slds-p-top_small slds-p-bottom_large">
+                                <dt class="slds-item_label slds-text-color_weak slds-truncate slds-p-top_small" title="Membership Cost">Membership Cost</dt>
+                                <dd class="slds-item_detail slds-truncate slds-p-top_small">{!v.membershipCost}</dd>
+                                <dt class="slds-item_label slds-text-color_weak slds-truncate slds-p-top_small" title="Preferred Billing Option">Preferred Billing Option</dt>
+                                <dd class="slds-item_detail slds-truncate slds-p-top_small">{!v.billingAccLabel}</dd>
+                                <dt class="slds-item_label slds-text-color_weak slds-truncate slds-p-top_small" title="Membership Start Date">Membership Start Date</dt>
+                                <dd class="slds-item_detail slds-truncate slds-p-top_small"><ui:outputDate value="{!v.today}" /></dd>
+                                <dt class="slds-item_label slds-text-color_weak slds-truncate slds-p-top_small" title="Membership Availability">Membership Availability</dt>
+                                <dd class="slds-item_detail slds-truncate slds-p-top_small">Immediately</dd>
+                            </dl>
+                            *Tax maybe added at checkout, depending on where the player lives
+                        </div>
+                        <footer class="slds-modal__footer slds-p-top_large">
+                            <lightning:button aura:id="cancelButton" label="Back" disabled="{!v.isDisabled}" onclick="{!c.navigateBack}"/>
+                            <lightning:button aura:id="nextButton" variant="brand" disabled="{!v.isDisabled}" label="Confirm" onclick="{!c.onConfirm}"/>
+                        </footer>
+                    </aura:set>
+                </aura:if>
+                
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>  
+</aura:component>

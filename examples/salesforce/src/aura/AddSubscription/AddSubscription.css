@@ -1,0 +1,11 @@
+.THIS .close-icon lightning-primitive-icon svg{
+    fill:#FFFFFF;
+}
+.THIS .modalBody{
+    height:45%;
+    overflow:auto;
+}
+.THIS .slds-dropdown-trigger .slds-dropdown {
+    max-height: 90px;
+    overflow-y: scroll;
+}

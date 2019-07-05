@@ -4,7 +4,7 @@ const sinon = require('sinon');
 const sinonChai = require("sinon-chai");
 chai.use(sinonChai);
 
-var $A = { util: sinon.spy()};
+//var $A = { util: sinon.spy()};
 
 const AccountBasicInfoController = require('../../../src/aura/AccountBasicInfo/AccountBasicInfoController.js');
 
@@ -31,7 +31,11 @@ describe('AccountBasicInfoController', function() {
       getSource: sinon.stub().returns({get: function() {return ''},set: function() {return ''}}),
       getParam:  sinon.spy()
     };
-
+    global.$A= {
+      get:sinon.spy(),
+      enqueueAction:sinon.spy(),
+      util: {toggleClass:sinon.spy()}
+    };
     describe('doInit', function() {
         it('will call the helper method searchCustomerData', function() {
             AccountBasicInfoController.doInit(component, event, helper);

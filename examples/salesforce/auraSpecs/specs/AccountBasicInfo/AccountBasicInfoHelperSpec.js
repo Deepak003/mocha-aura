@@ -53,7 +53,7 @@ describe('AccountBasicInfoHelper', function() {
         it('will open and close the accordian on click', function() {
             AccountBasicInfoHelper.accordianToggle(component, event);
             expect(component.find).to.have.been.calledWith('socialAccordian');
-            expect(global.$A.util.toggleClass).to.have.been.called;
+            expect($A.util.toggleClass).to.have.been.called;
         });
     });
 
@@ -67,7 +67,7 @@ describe('AccountBasicInfoHelper', function() {
             component.get.withArgs('c.searchCustomerData').returns(action);
             AccountBasicInfoHelper.searchCustomerData(component, event, helper);
             expect(component.get).to.have.been.calledWith('c.searchCustomerData');
-            expect(global.$A.get).to.have.been.calledWith('e.force:showToast');
+            expect($A.get).to.have.been.calledWith('e.force:showToast');
             expect(component.get).to.have.been.calledWith('v.isAccountObject');
             //Old Test Case Code
             //expect((component.get).callCount()).toEqual(3);
@@ -95,7 +95,7 @@ describe('AccountBasicInfoHelper', function() {
             component.get.withArgs('v.accountDetailsModel').returns(changeModel);
             AccountBasicInfoHelper.saveAccountData(component, event,helper, callback);
             expect(helper.showSpinner).to.have.been.called;
-            expect(global.$A.get).to.have.been.calledWith('e.force:showToast');
+            expect($A.get).to.have.been.calledWith('e.force:showToast');
             //expect(helper.hideSpinner).to.have.been.called;
             //expect(helper.showSpinner).toHaveBeenCalled();
             //expect(helper.hideSpinner).toHaveBeenCalled();
@@ -113,7 +113,7 @@ describe('AccountBasicInfoHelper', function() {
             component.get.withArgs('v.accountDetailsModel').returns(changeModel);
             AccountBasicInfoHelper.updateCustomerFlag(component, event,helper, callback);
             expect(helper.showSpinner).to.have.been.called;
-            expect(global.$A.get).to.have.been.calledWith('e.force:showToast');
+            expect($A.get).to.have.been.calledWith('e.force:showToast');
             //expect(component.get.calls.count()).toEqual(4);
         });
     });
