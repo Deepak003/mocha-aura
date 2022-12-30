@@ -17,7 +17,7 @@
     "mocha-runner": "^3.0.1"
   },
   "dependencies": {
-    "mocha": "^6.2.0",
+    "mocha": "^10.2.0",
     "mocha-aura": "^1.0.3"
   }
 }
