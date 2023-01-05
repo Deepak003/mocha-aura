@@ -54,7 +54,7 @@
     "mocha": "^3.4.2",
     "mocha-runner": "^1.1.2",
     "rollup": "^0.43.0",
-    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-istanbul": "^1.1.0",
     "rollup-watch": "^4.0.0",
     "sinon-chai": "^2.11.0"
